@@ -17,8 +17,11 @@ package de.thkwalter.galileitransformation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests für die Klasse {@link StandardGalileitransformation}.
@@ -32,26 +35,28 @@ class StandardGalileitransformationTest
  * Test für die Methode {@link StandardGalileitransformation#transformiere(Ereignis)}.
  */
 @DisplayName("t, y, und z bleiben immer unverändert")
-@Test
-void testTransformiere1()
+@ParameterizedTest
+@MethodSource("ereignisseStreamen")
+void testTransformiere1(Ereignis originalEreignis)
    {
    // Eine beliebige StandardGalileitransformation wird erzeugt.
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(-4.0);
-   
-   // Ein Ereignis wird erzeugt.
-   double t = -2.0;
-   double x = -1.0;
-   double y = 4.0;
-   double z = 0.0;
-   Ereignis originalEreignis = new Ereignis(t, x, y, z);
    
    // Die zu testende Methode wird aufgerufen.
    Ereignis transformiertesEreignis = galileitransformation.transformiere(originalEreignis);
    
    // Die Koordinatenwerte für t, y und z müssen unverändert sein.
-   assertEquals(t, transformiertesEreignis.t());
-   assertEquals(y, transformiertesEreignis.y());
-   assertEquals(z, transformiertesEreignis.z());
+   assertEquals(originalEreignis.t(), transformiertesEreignis.t());
+   assertEquals(originalEreignis.y(), transformiertesEreignis.y());
+   assertEquals(originalEreignis.z(), transformiertesEreignis.z());
+   }
+
+// =====================================================================================================================
+// =====================================================================================================================
+
+private static Stream<Ereignis> ereignisseStreamen() 
+   {
+   return Stream.of(new Ereignis(2.5, -5.3, 2.5, 0.9));
    }
 
 }
