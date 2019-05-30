@@ -17,6 +17,7 @@ package de.thkwalter.galileitransformation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
@@ -32,7 +33,8 @@ class StandardGalileitransformationTest
 {
 
 /**
- * Test für die Methode {@link StandardGalileitransformation#transformiere(Ereignis)}.
+ * Test für die Methode
+ * {@link StandardGalileitransformation#transformiere(Ereignis)}.
  */
 @DisplayName("t, y, und z bleiben immer unverändert")
 @ParameterizedTest
@@ -41,10 +43,10 @@ void testTransformiere1(Ereignis originalEreignis)
    {
    // Eine beliebige StandardGalileitransformation wird erzeugt.
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(-4.0);
-   
+
    // Die zu testende Methode wird aufgerufen.
    Ereignis transformiertesEreignis = galileitransformation.transformiere(originalEreignis);
-   
+
    // Die Koordinatenwerte für t, y und z müssen unverändert sein.
    assertEquals(originalEreignis.t(), transformiertesEreignis.t());
    assertEquals(originalEreignis.y(), transformiertesEreignis.y());
@@ -54,9 +56,17 @@ void testTransformiere1(Ereignis originalEreignis)
 // =====================================================================================================================
 // =====================================================================================================================
 
-private static Stream<Ereignis> ereignisseStreamen() 
+/**
+ * @return ein Strom von Ereignissen.
+ */
+private static Stream<Ereignis> ereignisseStreamen()
    {
-   return Stream.of(new Ereignis(2.5, -5.3, 2.5, 0.9));
+   Supplier<Ereignis> ereignisSupplier = () ->
+      {
+      return new Ereignis(2.5, -5.3, 2.5, 0.9);
+      };
+
+   return Stream.generate(ereignisSupplier).limit(10);
    }
 
 }
