@@ -17,7 +17,11 @@ package de.thkwalter.galileitransformation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
@@ -33,12 +37,13 @@ class StandardGalileitransformationTest
 {
 
 /**
- * Test für die Methode
- * {@link StandardGalileitransformation#transformiere(Ereignis)}.
+ * Test für die Methode {@link StandardGalileitransformation#transformiere(Ereignis)}. Der Test prüft nach, dass bei
+ * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinaten t, y und z immer
+ * unverändert bleiben.
  */
 @DisplayName("t, y, und z bleiben immer unverändert")
 @ParameterizedTest
-@MethodSource("ereignisseStreamen")
+@MethodSource("ereignislisteErzeugen")
 void testTransformiere1(Ereignis originalEreignis)
    {
    // Eine beliebige StandardGalileitransformation wird erzeugt.
@@ -57,16 +62,32 @@ void testTransformiere1(Ereignis originalEreignis)
 // =====================================================================================================================
 
 /**
- * @return ein Strom von Ereignissen.
+ * Erzeugt bei jedem Aufruf dieselbe Liste von zehn zufälligen Ereignissen.
+ * 
+ * @return eine {@link List} mit {@link Ereignis}-Objekten
  */
-private static Stream<Ereignis> ereignisseStreamen()
+private static List<Ereignis> ereignislisteErzeugen()
    {
-   Supplier<Ereignis> ereignisSupplier = () ->
+   // Die Anzahl der erzeugte Ereignisse
+   int anzahlEreignisse = 10;
+
+   // Der Zufallszahlengenerator erhält bei jedem Aufruf denselben Samen, damit
+   // jedes Mal dieselbe Liste erzeugt wird.
+   Random random = new Random(1L);
+   List<Double> zufallszahlen = random.doubles(4 * anzahlEreignisse, -100, 100).boxed().collect(Collectors.toList());
+
+   // Die Ereignisse werden erzeugt und der Ereignisliste hinzugefügt.
+   List<Ereignis> ereignisse = new ArrayList<Ereignis>();
+   for (int i = 0; i < anzahlEreignisse; i++)
       {
-      return new Ereignis(2.5, -5.3, 2.5, 0.9);
-      };
+      double t = zufallszahlen.get(4 * i);
+      double x = zufallszahlen.get(4 * i + 1);
+      double y = zufallszahlen.get(4 * i + 2);
+      double z = zufallszahlen.get(4 * i + 3);
 
-   return Stream.generate(ereignisSupplier).limit(10);
+      ereignisse.add(new Ereignis(t, x, y, z));
+      }
+
+   return ereignisse;
    }
-
 }
