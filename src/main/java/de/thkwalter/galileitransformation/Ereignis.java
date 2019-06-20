@@ -94,6 +94,6 @@ public double t()
 @Override
 public String toString()
    {
-   return "Ereignis [x=" + x + ", y=" + y + ", z=" + z + ", t=" + t + "]";
+   return "Ereignis [t=" + t + ", x=" + x + ", y=" + y + ", z=" + z + "]";
    }
 }

@@ -17,15 +17,11 @@ package de.thkwalter.galileitransformation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -70,7 +66,7 @@ void testTransformiere1(Ereignis originalEreignis, double geschwindigkeit)
 
 /**
  * Test für die Methode {@link StandardGalileitransformation#transformiere(Ereignis)}. Der Test prüft nach, dass bei
- * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinaten x unverändert bleibt,
+ * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinate x unverändert bleibt,
  * falls v = 0 gilt.
  */
 @DisplayName("x bleibt unverändert, falls v = 0")
@@ -84,7 +80,7 @@ void testTransformiere2(Ereignis originalEreignis)
    // Die zu testende Methode wird aufgerufen.
    Ereignis transformiertesEreignis = galileitransformation.transformiere(originalEreignis);
 
-   // Die Koordinatenwerte für x muss unverändert sein.
+   // Der Koordinatenwert für x muss unverändert sein.
    assertEquals(originalEreignis.x(), transformiertesEreignis.x());
    }
 
@@ -93,45 +89,58 @@ void testTransformiere2(Ereignis originalEreignis)
 
 /**
  * Test für die Methode {@link StandardGalileitransformation#transformiere(Ereignis)}. Der Test prüft nach, dass bei
- * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinaten x unverändert bleibt,
+ * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinate x unverändert bleibt,
  * falls t = 0 gilt.
  */
 @DisplayName("x bleibt unverändert, falls t = 0")
-@Test
-void testTransformiere3()
+@ParameterizedTest
+@MethodSource("ereignisseUndGeschwindigkeitenLiefern")
+void testTransformiere3(Ereignis originalEreignis, double geschwindigkeit)
    {
-   // Eine beliebige StandardGalileitransformation wird erzeugt.
-   StandardGalileitransformation galileitransformation = new StandardGalileitransformation(-15.0);
-
-   // Das Originalereignis wird erzeugt.
-   Ereignis originalEreignis = new Ereignis(0.0, -12.0, 3.0, 4.0);
+   // Eine StandardGalileitransformation wird erzeugt.
+   StandardGalileitransformation galileitransformation = new StandardGalileitransformation(geschwindigkeit);
+   
+   // Ein zufälliges Ereignis mit t=0 wird erzeugt.
+   double x = originalEreignis.x();
+   double y = originalEreignis.y();
+   double z = originalEreignis.z();
+   Ereignis modifiziertesOriginalEreignis = new Ereignis(0.0, x, y, z);
 
    // Die zu testende Methode wird aufgerufen.
-   Ereignis transformiertesEreignis = galileitransformation.transformiere(originalEreignis);
+   Ereignis transformiertesEreignis = galileitransformation.transformiere(modifiziertesOriginalEreignis);
 
-   // Die Koordinatenwerte für x muss unverändert sein.
+   // Der Koordinatenwert für x muss unverändert sein.
    assertEquals(originalEreignis.x(), transformiertesEreignis.x());
    }
 
 // =====================================================================================================================
 // =====================================================================================================================
 
-static Arguments[] ereignisseUndGeschwindigkeitenLiefern()
+/**
+ * Erzeugt bei jedem Aufruf ein Feld von {@link Arguments}-Objekten bestehend aus zufälligen Ereignissen und
+ * Geschwindigkeiten.
+ * 
+ * @return ein Feld von {@link Arguments}-Objekten. Das erste Argument ist jeweils ein Ereignis, das zweite Argument
+ * ein {@link Double} (Geschwindigkeit)
+ */
+private static Arguments[] ereignisseUndGeschwindigkeitenLiefern()
    {
+   // Ein Feld mit zuf"alligen Ereignissen wird geholt.
    Ereignis[] ereignisse = StandardGalileitransformationTest.ereignisseLiefern();
-   
-   // Der Zufallszahlengenerator erhält bei jedem Aufruf denselben Samen, damit
-   // jedes Mal dieselbe Liste erzeugt wird.
-   Random random = new Random(1L);
+
+   // Der Zufallszahlengenerator erhält bei jedem Aufruf denselben Samen, damit jedes Mal dieselbe Liste erzeugt wird.
+   Random random = new Random(2L);
    List<Double> geschwindigkeiten = random.doubles(StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE, -100, 100)
       .boxed().collect(Collectors.toList());
-   
-   Arguments[] argumente = new Arguments[StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE]; 
+
+   // Das Feld mit den Argumenten wird erzeugt. Das erste Argument ist ein Ereignis, das zweite Argument ein Double 
+   // Geschwindigkeit.
+   Arguments[] argumente = new Arguments[StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE];
    for (int i = 0; i < StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE; i++)
       {
       argumente[i] = Arguments.of(ereignisse[i], geschwindigkeiten.get(i));
       }
-   
+
    return argumente;
    }
 
@@ -139,9 +148,9 @@ static Arguments[] ereignisseUndGeschwindigkeitenLiefern()
 // =====================================================================================================================
 
 /**
- * Erzeugt bei jedem Aufruf dieselbe Liste von zehn zufälligen Ereignissen.
+ * Erzeugt bei jedem Aufruf dasselbe Feld von zufälligen Ereignissen.
  * 
- * @return eine {@link List} mit {@link Ereignis}-Objekten
+ * @return ein Feld von {@link Ereignis}-Objekten
  */
 private static Ereignis[] ereignisseLiefern()
    {
@@ -151,7 +160,7 @@ private static Ereignis[] ereignisseLiefern()
    List<Double> zufallszahlen = random.doubles(4 * StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE, -100, 100)
       .boxed().collect(Collectors.toList());
 
-   // Die Ereignisse werden erzeugt und der Ereignisliste hinzugefügt.
+   // Die Ereignisse werden erzeugt und einem Feld von Ereignissen hinzugefügt.
    Ereignis[] ereignisse = new Ereignis[StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE];
    for (int i = 0; i < StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE; i++)
       {
