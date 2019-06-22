@@ -16,6 +16,7 @@
 package de.thkwalter.galileitransformation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.lang.Math.abs;
 
 import java.util.List;
 import java.util.Random;
@@ -66,8 +67,8 @@ void testTransformiere1(Ereignis originalEreignis, double geschwindigkeit)
 
 /**
  * Test für die Methode {@link StandardGalileitransformation#transformiere(Ereignis)}. Der Test prüft nach, dass bei
- * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinate x unverändert bleibt,
- * falls v = 0 gilt.
+ * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinate x unverändert bleibt, falls
+ * v = 0 gilt.
  */
 @DisplayName("x bleibt unverändert, falls v = 0")
 @ParameterizedTest
@@ -89,8 +90,8 @@ void testTransformiere2(Ereignis originalEreignis)
 
 /**
  * Test für die Methode {@link StandardGalileitransformation#transformiere(Ereignis)}. Der Test prüft nach, dass bei
- * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinate x unverändert bleibt,
- * falls t = 0 gilt.
+ * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinate x unverändert bleibt, falls
+ * t = 0 gilt.
  */
 @DisplayName("x bleibt unverändert, falls t = 0")
 @ParameterizedTest
@@ -99,7 +100,7 @@ void testTransformiere3(Ereignis originalEreignis, double geschwindigkeit)
    {
    // Eine StandardGalileitransformation wird erzeugt.
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(geschwindigkeit);
-   
+
    // Ein zufälliges Ereignis mit t=0 wird erzeugt.
    double x = originalEreignis.x();
    double y = originalEreignis.y();
@@ -117,11 +118,42 @@ void testTransformiere3(Ereignis originalEreignis, double geschwindigkeit)
 // =====================================================================================================================
 
 /**
+ * Test für die Methode {@link StandardGalileitransformation#transformiere(Ereignis)}. Der Test prüft nach, dass nach
+ * einer Galileitransformation und der anschließenden Rücktransformation alle Koordinaten unverändert bleiben.
+ */
+@DisplayName("Alle Koordinaten bleiben nach Transformation und Rücktransformation unverändert")
+@ParameterizedTest
+@MethodSource("ereignisseUndGeschwindigkeitenLiefern")
+void testTransformiere4(Ereignis originalEreignis, double geschwindigkeit)
+   {
+   // Eine StandardGalileitransformation wird erzeugt.
+   StandardGalileitransformation galileitransformation = new StandardGalileitransformation(geschwindigkeit);
+
+   // Die Rücktransformation wird erzeugt.
+   StandardGalileitransformation ruecktransformation = new StandardGalileitransformation(-geschwindigkeit);
+
+   // Die Galileitransformation wird ausgeführt.
+   Ereignis temporaeresEreignis = galileitransformation.transformiere(originalEreignis);
+   
+   // Die Rücktransformation wird ausgeführt.
+   Ereignis transformiertesEreignis = ruecktransformation.transformiere(temporaeresEreignis);
+
+   // Alle Koordinatenwerte müssen unverändert sein.
+   assertEquals(originalEreignis.t(), transformiertesEreignis.t(), abs(originalEreignis.t() * 1E-9));
+   assertEquals(originalEreignis.x(), transformiertesEreignis.x(), abs(originalEreignis.x() * 1E-9));
+   assertEquals(originalEreignis.y(), transformiertesEreignis.y(), abs(originalEreignis.y() * 1E-9));
+   assertEquals(originalEreignis.z(), transformiertesEreignis.z(), abs(originalEreignis.z() * 1E-9));
+   }
+
+// =====================================================================================================================
+// =====================================================================================================================
+
+/**
  * Erzeugt bei jedem Aufruf ein Feld von {@link Arguments}-Objekten bestehend aus zufälligen Ereignissen und
  * Geschwindigkeiten.
  * 
- * @return ein Feld von {@link Arguments}-Objekten. Das erste Argument ist jeweils ein Ereignis, das zweite Argument
- * ein {@link Double} (Geschwindigkeit)
+ * @return ein Feld von {@link Arguments}-Objekten. Das erste Argument ist jeweils ein Ereignis, das zweite Argument ein
+ *         {@link Double} (Geschwindigkeit)
  */
 private static Arguments[] ereignisseUndGeschwindigkeitenLiefern()
    {
@@ -133,7 +165,7 @@ private static Arguments[] ereignisseUndGeschwindigkeitenLiefern()
    List<Double> geschwindigkeiten = random.doubles(StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE, -100, 100)
       .boxed().collect(Collectors.toList());
 
-   // Das Feld mit den Argumenten wird erzeugt. Das erste Argument ist ein Ereignis, das zweite Argument ein Double 
+   // Das Feld mit den Argumenten wird erzeugt. Das erste Argument ist ein Ereignis, das zweite Argument ein Double
    // Geschwindigkeit.
    Arguments[] argumente = new Arguments[StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE];
    for (int i = 0; i < StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE; i++)
