@@ -23,6 +23,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -34,7 +35,7 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 class StandardGalileitransformationTest
 {
-/** Die Anzahl der testdatensätze, die durch die verschiedenen {@link MethodSource}-Methoden erzeugt werden **/
+/** Die Anzahl der Testdatensätze, die durch die verschiedenen {@link MethodSource}-Methoden erzeugt werden **/
 private final static int ANZAHL_TESTDATENSAETZE = 10;
 
 // =====================================================================================================================
@@ -50,7 +51,7 @@ private final static int ANZAHL_TESTDATENSAETZE = 10;
 @MethodSource("ereignisseUndGeschwindigkeitenLiefern")
 void testTransformiere1(Ereignis originalEreignis, double geschwindigkeit)
    {
-   // Eine StandardGalileitransformation wird erzeugt.
+   // Eine Standard-Galileitransformation wird erzeugt.
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(geschwindigkeit);
 
    // Die zu testende Methode wird aufgerufen.
@@ -75,7 +76,7 @@ void testTransformiere1(Ereignis originalEreignis, double geschwindigkeit)
 @MethodSource("ereignisseLiefern")
 void testTransformiere2(Ereignis originalEreignis)
    {
-   // Eine StandardGalileitransformation für die Geschwindigkeit v = 0 wird erzeugt.
+   // Eine Standard-Galileitransformation für die Geschwindigkeit v = 0 wird erzeugt.
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(0.0);
 
    // Die zu testende Methode wird aufgerufen.
@@ -143,6 +144,39 @@ void testTransformiere4(Ereignis originalEreignis, double geschwindigkeit)
    assertEquals(originalEreignis.x(), transformiertesEreignis.x(), abs(originalEreignis.x() * 1E-9));
    assertEquals(originalEreignis.y(), transformiertesEreignis.y(), abs(originalEreignis.y() * 1E-9));
    assertEquals(originalEreignis.z(), transformiertesEreignis.z(), abs(originalEreignis.z() * 1E-9));
+   }
+
+// =====================================================================================================================
+// =====================================================================================================================
+
+/**
+ * Test für die Methode {@link StandardGalileitransformation#transformiere(Ereignis)}. Der Test prüft für vier Fälle
+ * nach, dass sich die x-Koordinate korrekt transformiert, falls v und t ungleich 0 sind.
+ */
+@DisplayName("Die x-Koordinate transformiert korrekt, falls v und t ungleich null sind.")
+@Test
+void testTransformiere5()
+   {
+   // Eine StandardGalileitransformation wird erzeugt.
+   StandardGalileitransformation galileitransformation = new StandardGalileitransformation(1.0);
+   
+   // Zwei originale Ereignisse werden erzeugt.
+   Ereignis originalEreignis1 = new Ereignis(1.0, 2.0, 3.0, 4.0);
+   Ereignis originalEreignis2 = new Ereignis(-5.0, 6.0, -7.0, 8.0);
+   Ereignis originalEreignis3 = new Ereignis(9.0, -10.0, 11.0, -12.0);
+   Ereignis originalEreignis4 = new Ereignis(-13.0, -14.0, -15.0, -16.0);
+   
+   // Die zu testende Methode wird aufgerufen.
+   Ereignis transformiertesEreignis1 = galileitransformation.transformiere(originalEreignis1);
+   Ereignis transformiertesEreignis2 = galileitransformation.transformiere(originalEreignis2);
+   Ereignis transformiertesEreignis3 = galileitransformation.transformiere(originalEreignis3);
+   Ereignis transformiertesEreignis4 = galileitransformation.transformiere(originalEreignis4);
+   
+   // Die x-Koordinate wurde korrekt transformiert.
+   assertEquals(1.0, transformiertesEreignis1.x(), 1.0 * 1E-9);
+   assertEquals(11.0, transformiertesEreignis2.x(), 11.0 * 1E-9);
+   assertEquals(-19.0, transformiertesEreignis3.x(), 19.0 * 1E-9);
+   assertEquals(-1.0, transformiertesEreignis4.x(), 1.0 * 1E-9);
    }
 
 // =====================================================================================================================

@@ -16,8 +16,7 @@
 package de.thkwalter.galileitransformation;
 
 /**
- * Diese Klasse repräsentiert eine Galileitransformation für zwei
- * Koordinatensysteme in der Standardkonfiguration.
+ * Diese Klasse repräsentiert eine Galileitransformation für zwei Koordinatensysteme in der Standardkonfiguration.
  * 
  * @author Th. K. Walter
  */
