@@ -52,10 +52,10 @@ public StandardGalileitransformation(double v)
  */
 public Ereignis transformiere(Ereignis originalEreignis)
    {
-   double x = originalEreignis.x();
-   double y = originalEreignis.y();
-   double z = originalEreignis.z();
-   double t = originalEreignis.t();
+   double x = originalEreignis.getX();
+   double y = originalEreignis.getY();
+   double z = originalEreignis.getZ();
+   double t = originalEreignis.getT();
 
    // Bei einer Standard-Galileitransformation muss nur die x-Koordinate des transformierten Ereignisses berechnet 
    // werden.

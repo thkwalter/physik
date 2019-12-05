@@ -58,9 +58,9 @@ void testTransformiere1(Ereignis originalEreignis, double geschwindigkeit)
    Ereignis transformiertesEreignis = galileitransformation.transformiere(originalEreignis);
 
    // Die Koordinatenwerte für t, y und z müssen unverändert sein.
-   assertEquals(originalEreignis.t(), transformiertesEreignis.t());
-   assertEquals(originalEreignis.y(), transformiertesEreignis.y());
-   assertEquals(originalEreignis.z(), transformiertesEreignis.z());
+   assertEquals(originalEreignis.getT(), transformiertesEreignis.getT());
+   assertEquals(originalEreignis.getY(), transformiertesEreignis.getY());
+   assertEquals(originalEreignis.getZ(), transformiertesEreignis.getZ());
    }
 
 // =====================================================================================================================
@@ -83,7 +83,7 @@ void testTransformiere2(Ereignis originalEreignis)
    Ereignis transformiertesEreignis = galileitransformation.transformiere(originalEreignis);
 
    // Der Koordinatenwert für x muss unverändert sein.
-   assertEquals(originalEreignis.x(), transformiertesEreignis.x());
+   assertEquals(originalEreignis.getX(), transformiertesEreignis.getX());
    }
 
 // =====================================================================================================================
@@ -103,16 +103,16 @@ void testTransformiere3(Ereignis originalEreignis, double geschwindigkeit)
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(geschwindigkeit);
 
    // Ein zufälliges Ereignis mit t=0 wird erzeugt.
-   double x = originalEreignis.x();
-   double y = originalEreignis.y();
-   double z = originalEreignis.z();
+   double x = originalEreignis.getX();
+   double y = originalEreignis.getY();
+   double z = originalEreignis.getZ();
    Ereignis modifiziertesOriginalEreignis = new Ereignis(0.0, x, y, z);
 
    // Die zu testende Methode wird aufgerufen.
    Ereignis transformiertesEreignis = galileitransformation.transformiere(modifiziertesOriginalEreignis);
 
    // Der Koordinatenwert für x muss unverändert sein.
-   assertEquals(originalEreignis.x(), transformiertesEreignis.x());
+   assertEquals(originalEreignis.getX(), transformiertesEreignis.getX());
    }
 
 // =====================================================================================================================
@@ -140,10 +140,10 @@ void testTransformiere4(Ereignis originalEreignis, double geschwindigkeit)
    Ereignis transformiertesEreignis = ruecktransformation.transformiere(temporaeresEreignis);
 
    // Alle Koordinatenwerte müssen unverändert sein.
-   assertEquals(originalEreignis.t(), transformiertesEreignis.t(), abs(originalEreignis.t() * 1E-9));
-   assertEquals(originalEreignis.x(), transformiertesEreignis.x(), abs(originalEreignis.x() * 1E-9));
-   assertEquals(originalEreignis.y(), transformiertesEreignis.y(), abs(originalEreignis.y() * 1E-9));
-   assertEquals(originalEreignis.z(), transformiertesEreignis.z(), abs(originalEreignis.z() * 1E-9));
+   assertEquals(originalEreignis.getT(), transformiertesEreignis.getT(), abs(originalEreignis.getT() * 1E-9));
+   assertEquals(originalEreignis.getX(), transformiertesEreignis.getX(), abs(originalEreignis.getX() * 1E-9));
+   assertEquals(originalEreignis.getY(), transformiertesEreignis.getY(), abs(originalEreignis.getY() * 1E-9));
+   assertEquals(originalEreignis.getZ(), transformiertesEreignis.getZ(), abs(originalEreignis.getZ() * 1E-9));
    }
 
 // =====================================================================================================================
@@ -173,10 +173,10 @@ void testTransformiere5()
    Ereignis transformiertesEreignis4 = galileitransformation.transformiere(originalEreignis4);
    
    // Die x-Koordinate wurde korrekt transformiert.
-   assertEquals(1.0, transformiertesEreignis1.x(), 1.0 * 1E-9);
-   assertEquals(11.0, transformiertesEreignis2.x(), 11.0 * 1E-9);
-   assertEquals(-19.0, transformiertesEreignis3.x(), 19.0 * 1E-9);
-   assertEquals(-1.0, transformiertesEreignis4.x(), 1.0 * 1E-9);
+   assertEquals(1.0, transformiertesEreignis1.getX(), 1.0 * 1E-9);
+   assertEquals(11.0, transformiertesEreignis2.getX(), 11.0 * 1E-9);
+   assertEquals(-19.0, transformiertesEreignis3.getX(), 19.0 * 1E-9);
+   assertEquals(-1.0, transformiertesEreignis4.getX(), 1.0 * 1E-9);
    }
 
 // =====================================================================================================================

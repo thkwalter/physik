@@ -59,7 +59,7 @@ public Ereignis(double t, double x, double y, double z)
 /**
  * @return die x-Koordinate (in m)
  */
-public double x()
+public double getX()
    {
    return this.x;
    }
@@ -67,7 +67,7 @@ public double x()
 /**
  * @return die y-Koordinate (in m)
  */
-public double y()
+public double getY()
    {
    return this.y;
    }
@@ -75,7 +75,7 @@ public double y()
 /**
  * @return die z-Koordinate (in m)
  */
-public double z()
+public double getZ()
    {
    return this.z;
    }
@@ -83,7 +83,7 @@ public double z()
 /**
  * @return die Zeitkoordinate (in s)
  */
-public double t()
+public double getT()
    {
    return this.t;
    }
