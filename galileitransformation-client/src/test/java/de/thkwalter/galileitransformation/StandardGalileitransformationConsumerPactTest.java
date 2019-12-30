@@ -40,7 +40,7 @@ import au.com.dius.pact.core.model.annotations.Pact;
  */
 @ExtendWith(PactConsumerTestExt.class)
 @PactTestFor(providerName = "StandardGalileitransformationProvider", port = "8080")
-class StandardGalileitransformationPactTest
+class StandardGalileitransformationConsumerPactTest
 {
 
 @Pact(provider = "StandardGalileitransformationProvider", consumer = "StandardGalileitransformationConsumer")
@@ -49,18 +49,18 @@ public RequestResponsePact transformieren(PactDslWithProvider builder)
    Map<String, String> headers = new HashMap<>();
    headers.put("Content-Type", "application/json");
 
-   String queryString = "t=-5&x=6&y=-7&z=8&v=1";
+   String queryString = "v=1&t=-2&x=3";
 
-   return builder.given("normal").uponReceiving("transformiertes Ereignis").path("/transformiere").query(queryString)
+   return builder.given("standard").uponReceiving("transformiertes Ereignis").path("/transformiere").query(queryString)
       .method("GET").willRespondWith().headers(headers).status(200)
-      .body(new PactDslJsonBody().integerType("t", -5).integerType("x", 11).integerType("y", 7).integerType("z", 8))
-      .toPact();
+      .body(new PactDslJsonBody().integerType("t", -2).integerType("x", 5)).toPact();
    }
 
 @Test
-void testArticles(MockServer mockServer) throws IOException
+void testTransformiere(MockServer mockServer) throws IOException
    {
-   HttpResponse httpResponse = Request.Get(mockServer.getUrl() + "/transformiere?t=-5&x=6&y=-7&z=8&v=1").execute().returnResponse();
+   HttpResponse httpResponse = Request.Get(mockServer.getUrl() + "/transformiere?t=-2&x=3&v=1").execute()
+      .returnResponse();
    assertEquals(200, httpResponse.getStatusLine().getStatusCode());
    System.out.println(IOUtils.toString(httpResponse.getEntity().getContent(), java.nio.charset.StandardCharsets.UTF_8));
    }

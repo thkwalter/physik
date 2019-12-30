@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
@@ -11,8 +12,8 @@
 
    <groupId>de.thkwalter</groupId>
    <artifactId>galileitransformation</artifactId>
-   <version>0.0.2-SNAPSHOT</version>
-   <packaging>jar</packaging>
+   <version>0.1-SNAPSHOT</version>
+   <packaging>pom</packaging>
 
    <name>galileitransformation</name>
 
@@ -36,33 +37,8 @@
 
    <dependencies>
       <dependency>
-         <groupId>org.springframework.boot</groupId>
-         <artifactId>spring-boot-starter-web</artifactId>
-      </dependency>
-
-      <dependency>
          <groupId>org.junit.jupiter</groupId>
          <artifactId>junit-jupiter-engine</artifactId>
-         <scope>test</scope>
-      </dependency>
-
-      <dependency>
-         <groupId>commons-io</groupId>
-         <artifactId>commons-io</artifactId>
-         <version>2.6</version>
-         <scope>test</scope>
-      </dependency>
-
-      <dependency>
-         <groupId>org.junit.jupiter</groupId>
-         <artifactId>junit-jupiter-params</artifactId>
-         <scope>test</scope>
-      </dependency>
-
-      <dependency>
-         <groupId>au.com.dius</groupId>
-         <artifactId>pact-jvm-consumer-junit5</artifactId>
-         <version>4.0.3</version>
          <scope>test</scope>
       </dependency>
    </dependencies>
@@ -73,12 +49,11 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <version>3.0.0-M3</version>
          </plugin>
-
-         <plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-         </plugin>
       </plugins>
    </build>
 
+   <modules>
+      <module>galileitransformation-client</module>
+      <module>galileitransformation-service</module>
+   </modules>
 </project>
