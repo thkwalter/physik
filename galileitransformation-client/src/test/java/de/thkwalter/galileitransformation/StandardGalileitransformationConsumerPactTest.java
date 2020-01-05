@@ -17,15 +17,19 @@ package de.thkwalter.galileitransformation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
+import org.json.JSONTokener;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
@@ -36,6 +40,8 @@ import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
 
 /**
+ * Ein Test zur Erzeugung und Verifizierung der Pact-Datei für den Standard-Galileitransformationsservice.
+ * 
  * @author Th. K. Walter
  */
 @ExtendWith(PactConsumerTestExt.class)
@@ -43,9 +49,17 @@ import au.com.dius.pact.core.model.annotations.Pact;
 class StandardGalileitransformationConsumerPactTest
 {
 
+/**
+ * Erzeugt das {@link RequestResponsePact}--Objekt, welches durch Serilisierung die Pact-Datei ergibt.
+ * 
+ * @param builder der {@link PaPactDslWithProvider}, mit dessen Hilfe das {@RequestResponsePact}--Objekt erzeugt wird.
+ * 
+ * @return das {@link RequestResponsePact}--Objekt, welches durch Serilisierung die Pact-Datei ergibt
+ */
 @Pact(provider = "StandardGalileitransformationProvider", consumer = "StandardGalileitransformationConsumer")
-public RequestResponsePact transformieren(PactDslWithProvider builder)
+public RequestResponsePact transformiere(PactDslWithProvider builder)
    {
+   // Der Content-Type-Header wird auf "application/json" gesetzt.
    Map<String, String> headers = new HashMap<>();
    headers.put("Content-Type", "application/json");
 
@@ -56,12 +70,37 @@ public RequestResponsePact transformieren(PactDslWithProvider builder)
       .body(new PactDslJsonBody().integerType("t", -2).integerType("x", 5)).toPact();
    }
 
+// =====================================================================================================================
+// =====================================================================================================================
+
 @Test
+/**
+ * Dieser Test verifiziert, dass die erzeugt Pact-Datei, die Interaktion mit dem Server korrekt beschreibt.
+ *
+ * @param mockServer der mit Hilfe der Pact-Datei erzeugte Server-Mock 
+ * 
+ * @throws IOException
+ */
 void testTransformiere(MockServer mockServer) throws IOException
    {
+   // Der Mock-Server wird aufgerufen.
    HttpResponse httpResponse = Request.Get(mockServer.getUrl() + "/transformiere?t=-2&x=3&v=1").execute()
       .returnResponse();
+   
+   // Es wird geprüft, ob der Status-Code 200 ist.
    assertEquals(200, httpResponse.getStatusLine().getStatusCode());
-   System.out.println(IOUtils.toString(httpResponse.getEntity().getContent(), java.nio.charset.StandardCharsets.UTF_8));
+   
+   // Das JSON im Body wird geparsed.
+   BufferedReader reader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent(), "UTF-8"));
+   String json = reader.readLine();
+   JSONTokener tokener = new JSONTokener(json);
+   JSONObject jsonWurzel = new JSONObject(tokener);
+   
+   // Es wird überprüft, ob der JSON-Body die erwarteten Werte enthält.
+   assertEquals(jsonWurzel.getInt("x"), 5);
+   assertEquals(jsonWurzel.getInt("t"), -2);
+   
+   // Es wird überprüft, dass der JSON-Body ausschließlich die erwarteten Werte enthält.
+   assertEquals(jsonWurzel.keySet().size(), 2);
    }
 }
