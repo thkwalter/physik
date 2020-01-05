@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Th. K. Walter
  */
 @RestController
-public class StandardGalileitransformationController
+public class StandardGalileitransformationService
 {
 /**
  * Transformiert das mittels der Request-Parameter spezifizierte Ereignis. Die Geschwindigkeit der Standard-
@@ -33,18 +33,16 @@ public class StandardGalileitransformationController
  * 
  * @param t Die Zeitkoordinate (in s)
  * @param x Die x-Koordinate (in m)
- * @param y Die y-Koordinate (in m)
- * @param z Die z-Koordinate (in m)
  * @param v Die Geschwindigkeit (in m/s)
  * 
  * @return Das transformierte {@link Ereignis}
  */
 @RequestMapping("/transformiere")
 public Ereignis transformiere(@RequestParam(value = "t") double t, @RequestParam(value = "x") double x,
-   @RequestParam(value = "y") double y, @RequestParam(value = "z") double z, @RequestParam(value = "v") double v)
+   @RequestParam(value = "v") double v)
    {
    // Das originale Ereignis wird mit Hilfe der Request-Parameter erzeugt.
-   Ereignis originalEreignis = new Ereignis(t, x, y, z);
+   Ereignis originalEreignis = new Ereignis(t, x);
    
    // Die Galileitransformation wird mit Hilfe des letzten Request-Parameters erzeugt.
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(v);

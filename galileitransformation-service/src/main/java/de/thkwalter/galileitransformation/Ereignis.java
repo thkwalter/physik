@@ -16,7 +16,7 @@
 package de.thkwalter.galileitransformation;
 
 /**
- * Diese Klasse repräsentiert ein Ereignis in der Raumzeit.
+ * Diese Klasse repräsentiert ein Ereignis in einer zweidimensionalen Raumzeit.
  * 
  * @author Th. K. Walter
  */
@@ -25,12 +25,6 @@ public class Ereignis
 /* Die x-Koordinate (in m) */
 private double x;
 
-/* Die y-Koordinate (in m) */
-private double y;
-
-/* Die z-Koordinate (in m) */
-private double z;
-
 /* Die Zeitkoordinate (in s) */
 private double t;
 
@@ -38,18 +32,14 @@ private double t;
 // =====================================================================================================================
 
 /**
- * Initialisiert das Ereignis durch Angabe aller Koordinatenwerte. 
+ * Initialisiert das Ereignis durch Angabe von Ort und Zeit. 
  * 
  * @param t die Zeitkoordinate (in s)
  * @param x die x-Koordinate (in m)
- * @param y die y-Koordinate (in m)
- * @param z die z-Koordinate (in m)
  */
-public Ereignis(double t, double x, double y, double z)
+public Ereignis(double t, double x)
    {
    this.x = x;
-   this.y = y;
-   this.z = z;
    this.t = t;
    }
 
@@ -62,22 +52,6 @@ public Ereignis(double t, double x, double y, double z)
 public double getX()
    {
    return this.x;
-   }
-
-/**
- * @return die y-Koordinate (in m)
- */
-public double getY()
-   {
-   return this.y;
-   }
-
-/**
- * @return die z-Koordinate (in m)
- */
-public double getZ()
-   {
-   return this.z;
    }
 
 /**
@@ -94,6 +68,6 @@ public double getT()
 @Override
 public String toString()
    {
-   return "Ereignis [t=" + t + ", x=" + x + ", y=" + y + ", z=" + z + "]";
+   return "Ereignis [t=" + t + ", x=" + x + "]";
    }
 }

@@ -43,8 +43,7 @@ private final static int ANZAHL_TESTDATENSAETZE = 10;
 
 /**
  * Test für die Methode {@link StandardGalileitransformation#transformiere(Ereignis)}. Der Test prüft nach, dass bei
- * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinaten t, y und z immer
- * unverändert bleiben.
+ * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinate t immer unverändert bleibt.
  */
 @DisplayName("t, y, und z bleiben immer unverändert")
 @ParameterizedTest
@@ -59,8 +58,6 @@ void testTransformiere1(Ereignis originalEreignis, double geschwindigkeit)
 
    // Die Koordinatenwerte für t, y und z müssen unverändert sein.
    assertEquals(originalEreignis.getT(), transformiertesEreignis.getT());
-   assertEquals(originalEreignis.getY(), transformiertesEreignis.getY());
-   assertEquals(originalEreignis.getZ(), transformiertesEreignis.getZ());
    }
 
 // =====================================================================================================================
@@ -104,9 +101,7 @@ void testTransformiere3(Ereignis originalEreignis, double geschwindigkeit)
 
    // Ein zufälliges Ereignis mit t=0 wird erzeugt.
    double x = originalEreignis.getX();
-   double y = originalEreignis.getY();
-   double z = originalEreignis.getZ();
-   Ereignis modifiziertesOriginalEreignis = new Ereignis(0.0, x, y, z);
+   Ereignis modifiziertesOriginalEreignis = new Ereignis(0.0, x);
 
    // Die zu testende Methode wird aufgerufen.
    Ereignis transformiertesEreignis = galileitransformation.transformiere(modifiziertesOriginalEreignis);
@@ -142,8 +137,6 @@ void testTransformiere4(Ereignis originalEreignis, double geschwindigkeit)
    // Alle Koordinatenwerte müssen unverändert sein.
    assertEquals(originalEreignis.getT(), transformiertesEreignis.getT(), abs(originalEreignis.getT() * 1E-9));
    assertEquals(originalEreignis.getX(), transformiertesEreignis.getX(), abs(originalEreignis.getX() * 1E-9));
-   assertEquals(originalEreignis.getY(), transformiertesEreignis.getY(), abs(originalEreignis.getY() * 1E-9));
-   assertEquals(originalEreignis.getZ(), transformiertesEreignis.getZ(), abs(originalEreignis.getZ() * 1E-9));
    }
 
 // =====================================================================================================================
@@ -161,10 +154,10 @@ void testTransformiere5()
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(1.0);
    
    // Zwei originale Ereignisse werden erzeugt.
-   Ereignis originalEreignis1 = new Ereignis(1.0, 2.0, 3.0, 4.0);
-   Ereignis originalEreignis2 = new Ereignis(-5.0, 6.0, -7.0, 8.0);
-   Ereignis originalEreignis3 = new Ereignis(9.0, -10.0, 11.0, -12.0);
-   Ereignis originalEreignis4 = new Ereignis(-13.0, -14.0, -15.0, -16.0);
+   Ereignis originalEreignis1 = new Ereignis(1.0, 2.0);
+   Ereignis originalEreignis2 = new Ereignis(-2.0, 3.0);
+   Ereignis originalEreignis3 = new Ereignis(9.0, -10.0);
+   Ereignis originalEreignis4 = new Ereignis(-13.0, -14.0);
    
    // Die zu testende Methode wird aufgerufen.
    Ereignis transformiertesEreignis1 = galileitransformation.transformiere(originalEreignis1);
@@ -174,7 +167,7 @@ void testTransformiere5()
    
    // Die x-Koordinate wurde korrekt transformiert.
    assertEquals(1.0, transformiertesEreignis1.getX(), 1.0 * 1E-9);
-   assertEquals(11.0, transformiertesEreignis2.getX(), 11.0 * 1E-9);
+   assertEquals(5.0, transformiertesEreignis2.getX(), 5.0 * 1E-9);
    assertEquals(-19.0, transformiertesEreignis3.getX(), 19.0 * 1E-9);
    assertEquals(-1.0, transformiertesEreignis4.getX(), 1.0 * 1E-9);
    }
@@ -223,19 +216,17 @@ private static Ereignis[] ereignisseLiefern()
    // Der Zufallszahlengenerator erhält bei jedem Aufruf denselben Samen, damit
    // jedes Mal dieselbe Liste erzeugt wird.
    Random random = new Random(1L);
-   List<Double> zufallszahlen = random.doubles(4 * StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE, -100, 100)
+   List<Double> zufallszahlen = random.doubles(2 * StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE, -100, 100)
       .boxed().collect(Collectors.toList());
 
    // Die Ereignisse werden erzeugt und einem Feld von Ereignissen hinzugefügt.
    Ereignis[] ereignisse = new Ereignis[StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE];
    for (int i = 0; i < StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE; i++)
       {
-      double t = zufallszahlen.get(4 * i);
-      double x = zufallszahlen.get(4 * i + 1);
-      double y = zufallszahlen.get(4 * i + 2);
-      double z = zufallszahlen.get(4 * i + 3);
+      double t = zufallszahlen.get(2 * i);
+      double x = zufallszahlen.get(2 * i + 1);
 
-      ereignisse[i] = new Ereignis(t, x, y, z);
+      ereignisse[i] = new Ereignis(t, x);
       }
 
    return ereignisse;
