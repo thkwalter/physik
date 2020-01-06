@@ -28,6 +28,14 @@
          <artifactId>junit-jupiter-params</artifactId>
          <scope>test</scope>
       </dependency>
+
+      <dependency>
+         <groupId>au.com.dius</groupId>
+         <artifactId>pact-jvm-provider-junit5</artifactId>
+         <version>4.0.3</version>
+         <scope>test</scope>
+      </dependency>
+
    </dependencies>
 
    <build>

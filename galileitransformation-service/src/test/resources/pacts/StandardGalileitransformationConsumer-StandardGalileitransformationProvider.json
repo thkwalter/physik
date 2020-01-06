@@ -1,0 +1,66 @@
+{
+  "provider": {
+    "name": "StandardGalileitransformationProvider"
+  },
+  "consumer": {
+    "name": "StandardGalileitransformationConsumer"
+  },
+  "interactions": [
+    {
+      "description": "transformiertes Ereignis",
+      "request": {
+        "method": "GET",
+        "path": "/transformiere",
+        "query": {
+          "v": [
+            "1"
+          ],
+          "t": [
+            "-2"
+          ],
+          "x": [
+            "3"
+          ]
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "t": -2,
+          "x": 5
+        },
+        "matchingRules": {
+          "body": {
+            "$.t": {
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.x": {
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    },
+    "pact-jvm": {
+      "version": "4.0.3"
+    }
+  }
+}

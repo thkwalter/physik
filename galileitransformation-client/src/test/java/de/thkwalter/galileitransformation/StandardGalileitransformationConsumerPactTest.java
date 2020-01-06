@@ -65,9 +65,9 @@ public RequestResponsePact transformiere(PactDslWithProvider builder)
 
    String queryString = "v=1&t=-2&x=3";
 
-   return builder.given("standard").uponReceiving("transformiertes Ereignis").path("/transformiere").query(queryString)
+   return builder./*given("standard").*/uponReceiving("transformiertes Ereignis").path("/transformiere").query(queryString)
       .method("GET").willRespondWith().headers(headers).status(200)
-      .body(new PactDslJsonBody().integerType("t", -2).integerType("x", 5)).toPact();
+      .body(new PactDslJsonBody().numberType("t", -2).numberType("x", 5)).toPact();
    }
 
 // =====================================================================================================================
