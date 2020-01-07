@@ -16,6 +16,7 @@
 package de.thkwalter.galileitransformation;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -30,6 +31,7 @@ import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvide
  */
 @Provider("StandardGalileitransformationProvider")
 @PactFolder("pacts")
+@Tag("pact-provider-test")
 public class StandardGalileitransformationProviderPactTest
 {
 @TestTemplate
