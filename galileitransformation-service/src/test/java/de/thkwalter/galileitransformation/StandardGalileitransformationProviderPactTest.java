@@ -15,10 +15,14 @@
  */
 package de.thkwalter.galileitransformation;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.SpringApplication;
+import org.springframework.web.context.ConfigurableWebApplicationContext;
 
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.loader.PactFolder;
@@ -34,6 +38,21 @@ import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvide
 @Tag("pact-provider-test")
 public class StandardGalileitransformationProviderPactTest
 {
+private static ConfigurableWebApplicationContext application;
+
+@BeforeAll
+public static void startService()
+   {
+   StandardGalileitransformationProviderPactTest.application = (ConfigurableWebApplicationContext) SpringApplication
+      .run(StandardGalileitransformationServer.class);
+   }
+
+@BeforeEach
+void before(PactVerificationContext context)
+   {
+   context.setTarget(new HttpTestTarget("localhost", 8080, "/"));
+   }
+
 @TestTemplate
 @ExtendWith(PactVerificationInvocationContextProvider.class)
 void testTemplate(PactVerificationContext context) 
@@ -41,9 +60,9 @@ void testTemplate(PactVerificationContext context)
    context.verifyInteraction();
    }
 
-@BeforeEach
-void before(PactVerificationContext context)
+@AfterAll
+public static void stopService()
    {
-   context.setTarget(new HttpTestTarget("localhost", 8080, "/"));
+   StandardGalileitransformationProviderPactTest.application.close(); 
    }
 }
