@@ -18,9 +18,9 @@ package de.thkwalter.galileitransformation;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.TestTemplateInvocationContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 
@@ -31,37 +31,64 @@ import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
 
 /**
+ * Der Pact-Provider-Test für den {@link StandardGalileitransformationService}.
+ * 
  * @author Th. K. Walter
  */
 @Provider("StandardGalileitransformationProvider")
 @PactFolder("pacts")
-@Tag("pact-provider-test")
 public class StandardGalileitransformationProviderPactTest
 {
+/** Der {@link ConfigurableWebApplicationContext} wird benötigt, um den Service nach den Tests wieder zu stoppen. */
 private static ConfigurableWebApplicationContext application;
 
+/**
+ * Startet den Service bevor die Tests ausgeführt werden.
+ */
 @BeforeAll
-public static void startService()
+public static void serviceStarten()
    {
    StandardGalileitransformationProviderPactTest.application = (ConfigurableWebApplicationContext) SpringApplication
       .run(StandardGalileitransformationServer.class);
    }
 
+// =====================================================================================================================
+// =====================================================================================================================
+
+/**
+ * Vor jedem einzelnen Test wird die URL festgelegt, unter welcher der Service zu erreichen ist.
+ * 
+ * @param context Der {@link TestTemplateInvocationContext}, der an jeden Aufruf des Test-Templates übergeben wird.
+ */
 @BeforeEach
-void before(PactVerificationContext context)
+void urlSetzen(PactVerificationContext context)
    {
    context.setTarget(new HttpTestTarget("localhost", 8080, "/"));
    }
 
+// =====================================================================================================================
+// =====================================================================================================================
+
+/**
+ * Ruft das Test-Template für jeden in der Pact-Datei spezifizierten Test einmal auf.
+ * 
+ * @param context Der {@link TestTemplateInvocationContext}, der an jeden Aufruf des Test-Templates übergeben wird.
+ */
 @TestTemplate
 @ExtendWith(PactVerificationInvocationContextProvider.class)
-void testTemplate(PactVerificationContext context) 
+void testAusfuehren(PactVerificationContext context) 
    {
    context.verifyInteraction();
    }
 
+// =====================================================================================================================
+// =====================================================================================================================
+
+/**
+ * Stoppt den Service nachdem alle Tests ausgeführt worden sind.
+ */
 @AfterAll
-public static void stopService()
+public static void serviceStoppen()
    {
    StandardGalileitransformationProviderPactTest.application.close(); 
    }
