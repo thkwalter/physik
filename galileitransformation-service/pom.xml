@@ -39,10 +39,31 @@
    </dependencies>
 
    <build>
-      <plugins>         
+      <plugins>
          <plugin>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>
+         </plugin>
+
+         <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+               <execution>
+                  <phase>process-resources</phase>
+                  <goals>
+                     <goal>copy-resources</goal>
+                  </goals>
+                  <configuration>
+                     <outputDirectory>${basedir}/target/test-classes/pacts</outputDirectory>
+                     <resources>
+                        <resource>
+                           <directory>${basedir}/../galileitransformation-client/target/pacts</directory>
+                           <filtering>false</filtering>
+                        </resource>
+                     </resources>
+                  </configuration>
+               </execution>
+            </executions>
          </plugin>
       </plugins>
    </build>
