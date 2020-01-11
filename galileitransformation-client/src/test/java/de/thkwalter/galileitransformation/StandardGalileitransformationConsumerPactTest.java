@@ -97,8 +97,8 @@ void testTransformiere(MockServer mockServer) throws IOException
    JSONObject jsonWurzel = new JSONObject(tokener);
    
    // Es wird überprüft, ob der JSON-Body die erwarteten Werte enthält.
-   assertEquals(jsonWurzel.getInt("x"), 5);
-   assertEquals(jsonWurzel.getInt("t"), -2);
+   assertEquals(jsonWurzel.getDouble("x"), 5);
+   assertEquals(jsonWurzel.getDouble("t"), -2);
    
    // Es wird überprüft, dass der JSON-Body ausschließlich die erwarteten Werte enthält.
    assertEquals(jsonWurzel.keySet().size(), 2);
