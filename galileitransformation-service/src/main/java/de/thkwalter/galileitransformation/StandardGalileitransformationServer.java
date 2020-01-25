@@ -15,8 +15,16 @@
  */
 package de.thkwalter.galileitransformation;
 
+import javax.measure.Quantity;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+
+import de.thkwalter.jackson.QuantitySerializer;
 
 /**
  * Diese Klasse startet einen Server, der den {@link StandardGalileitransformation-Services} anbietet.
@@ -29,5 +37,15 @@ public class StandardGalileitransformationServer
 public static void main(String[] args)
    {
    SpringApplication.run(StandardGalileitransformationServer.class, args);
+   }
+
+@SuppressWarnings({ "unchecked", "rawtypes" })
+@Bean
+public SimpleModule getJacksonQuantityModule()
+   {
+   SimpleModule module = new SimpleModule("QuantitySerializer", new Version(1, 0, 0, null, null, null));
+   module.addSerializer(Quantity.class, new QuantitySerializer());
+   
+   return module;
    }
 }

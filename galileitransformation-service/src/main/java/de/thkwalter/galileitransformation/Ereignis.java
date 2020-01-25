@@ -15,6 +15,9 @@
  */
 package de.thkwalter.galileitransformation;
 
+import javax.measure.Quantity;
+import javax.measure.quantity.Time;
+
 /**
  * Diese Klasse repräsentiert ein Ereignis in einer zweidimensionalen Raumzeit.
  * 
@@ -25,8 +28,8 @@ public class Ereignis
 /* Die x-Koordinate (in m) */
 private double x;
 
-/* Die Zeitkoordinate (in s) */
-private double t;
+/* Die Zeitkoordinate */
+private Quantity<Time> t;
 
 // =====================================================================================================================
 // =====================================================================================================================
@@ -34,10 +37,10 @@ private double t;
 /**
  * Initialisiert das Ereignis durch Angabe von Ort und Zeit. 
  * 
- * @param t die Zeitkoordinate (in s)
+ * @param t die Zeitkoordinate
  * @param x die x-Koordinate (in m)
  */
-public Ereignis(double t, double x)
+public Ereignis(Quantity<Time> t, double x)
    {
    this.x = x;
    this.t = t;
@@ -55,9 +58,9 @@ public double getX()
    }
 
 /**
- * @return die Zeitkoordinate (in s)
+ * @return die Zeitkoordinate
  */
-public double getT()
+public Quantity<Time> getT()
    {
    return this.t;
    }
@@ -68,6 +71,6 @@ public double getT()
 @Override
 public String toString()
    {
-   return "Ereignis [t=" + t + ", x=" + x + "]";
+   return "Ereignis [x=" + x + ", t=" + t + "]";
    }
 }

@@ -15,6 +15,9 @@
  */
 package de.thkwalter.galileitransformation;
 
+import javax.measure.Quantity;
+import javax.measure.quantity.Time;
+
 /**
  * Diese Klasse repräsentiert eine Galileitransformation für zwei Koordinatensysteme in der Standardkonfiguration.
  * 
@@ -53,12 +56,14 @@ public StandardGalileitransformation(double v)
 public Ereignis transformiere(Ereignis originalEreignis)
    {
    double x = originalEreignis.getX();
-   double t = originalEreignis.getT();
+   
+   Quantity<Time> tQuantity = originalEreignis.getT();
+   double t = tQuantity.toSystemUnit().getValue().doubleValue();
 
    // Bei einer Standard-Galileitransformation muss nur die x-Koordinate des transformierten Ereignisses berechnet 
    // werden.
    double x_transformiert = x - v * t;
 
-   return new Ereignis(t, x_transformiert);
+   return new Ereignis(tQuantity, x_transformiert);
    }
 }

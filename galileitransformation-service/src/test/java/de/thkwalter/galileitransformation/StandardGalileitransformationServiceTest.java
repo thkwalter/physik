@@ -43,7 +43,8 @@ void testTransformiere()
    Ereignis transformiertesEreignis = controller.transformiere(-2.0, 3.0, 1.0);
    
    // Anhand des transformierten Ereignisses wird geprüft, ob die Funktionsargumente korrekt verarbeitet werden.
-   assertEquals(-2.0, transformiertesEreignis.getT(), 2.0 * 1E-9);
+   double tTransformiert = transformiertesEreignis.getT().toSystemUnit().getValue().doubleValue();
+   assertEquals(-2.0, tTransformiert, 2.0 * 1E-9);
    assertEquals(5.0, transformiertesEreignis.getX(), 5.0 * 1E-9);
    }
 }
