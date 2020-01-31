@@ -24,6 +24,8 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 /**
+ * Diese Klasse serialisiert {@link Quantity}-Objekte für den Jackson-Serializer.
+ * 
  * @author Th. K. Walter
  */
 public class QuantitySerializer<Q extends Quantity<Q>> extends JsonSerializer<Quantity<Q>>
@@ -31,6 +33,7 @@ public class QuantitySerializer<Q extends Quantity<Q>> extends JsonSerializer<Qu
 @Override
 public void serialize(Quantity<Q> quantity, JsonGenerator gen, SerializerProvider serializers) throws IOException
    {
+   // Der Wert der Größe wird in der Grundeinheit ausgegeben.
    gen.writeNumber(quantity.toSystemUnit().getValue().doubleValue());
    }
 }

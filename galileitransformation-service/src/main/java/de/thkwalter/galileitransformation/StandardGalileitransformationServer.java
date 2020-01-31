@@ -39,10 +39,22 @@ public static void main(String[] args)
    SpringApplication.run(StandardGalileitransformationServer.class, args);
    }
 
+
+// =====================================================================================================================
+// =====================================================================================================================
+
+
+/**
+ * Diese Methode wird vom Jackson-Framework aufgerufen und initialisiert den Jackson-Serializer mit einem 
+ * {@link QuantitySerializer} zum Serialisieren von {@link Quantity}-Objekten.
+ * 
+ * @return ein {@link SimpleModule} das einen {@link QuantitySerializer} kapselt.
+ */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @Bean
 public SimpleModule getJacksonQuantityModule()
    {
+   // Ein SimpleModule wird erstellt, das einen QuantitySerializer kapselt.
    SimpleModule module = new SimpleModule("QuantitySerializer", new Version(1, 0, 0, null, null, null));
    module.addSerializer(Quantity.class, new QuantitySerializer());
    

@@ -57,6 +57,7 @@ public Ereignis transformiere(Ereignis originalEreignis)
    {
    double x = originalEreignis.getX();
    
+   // Die Zeitkoordinate wird in Sekunden gelesen.
    Quantity<Time> tQuantity = originalEreignis.getT();
    double t = tQuantity.toSystemUnit().getValue().doubleValue();
 
@@ -64,6 +65,7 @@ public Ereignis transformiere(Ereignis originalEreignis)
    // werden.
    double x_transformiert = x - v * t;
 
+   // Das transformierte Ereignis wird erstellt und zurückgegeben.
    return new Ereignis(tQuantity, x_transformiert);
    }
 }
