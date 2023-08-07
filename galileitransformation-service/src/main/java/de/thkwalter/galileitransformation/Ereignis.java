@@ -1,12 +1,12 @@
 /**
- * Copyright 2019 Th. K. Walter
- *
+ * Copyright 2023 Th. K. Walter
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,58 +19,11 @@ import javax.measure.Quantity;
 import javax.measure.quantity.Time;
 
 /**
- * Diese Klasse repräsentiert ein Ereignis in einer zweidimensionalen Raumzeit.
- * 
- * @author Th. K. Walter
+ * Diese Klasse repr&auml;sentiert ein Ereignis in einer zweidimensionalen Raumzeit.
+ *
+ * @author Thomas K. Walter
+ *
+ * @param t Die Zeitkoordinate
+ * @param x Die x-koordinate (in m)
  */
-public class Ereignis
-{
-/* Die x-Koordinate (in m) */
-private double x;
-
-/* Die Zeitkoordinate */
-private Quantity<Time> t;
-
-// =====================================================================================================================
-// =====================================================================================================================
-
-/**
- * Initialisiert das Ereignis durch Angabe von Ort und Zeit. 
- * 
- * @param t die Zeitkoordinate
- * @param x die x-Koordinate (in m)
- */
-public Ereignis(Quantity<Time> t, double x)
-   {
-   this.x = x;
-   this.t = t;
-   }
-
-// =====================================================================================================================
-// =====================================================================================================================
-
-/**
- * @return die x-Koordinate (in m)
- */
-public double getX()
-   {
-   return this.x;
-   }
-
-/**
- * @return die Zeitkoordinate
- */
-public Quantity<Time> getT()
-   {
-   return this.t;
-   }
-
-// =====================================================================================================================
-// =====================================================================================================================
-
-@Override
-public String toString()
-   {
-   return "Ereignis [x=" + x + ", t=" + t + "]";
-   }
-}
+public record Ereignis (Quantity<Time> t, double x) {}
