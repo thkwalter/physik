@@ -1,12 +1,12 @@
 /**
  * Copyright 2019 Th. K. Walter
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  *    http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -82,7 +82,7 @@ void testTransformiere1(Ereignis originalEreignis, double geschwindigkeit)
    Ereignis transformiertesEreignis = galileitransformation.transformiere(originalEreignis);
 
    // Die Koordinatenwerte für t, y und z müssen unverändert sein.
-   assertEquals(originalEreignis.getT(), transformiertesEreignis.getT());
+   assertEquals(originalEreignis.t(), transformiertesEreignis.t());
    }
 
 // =====================================================================================================================
@@ -105,7 +105,7 @@ void testTransformiere2(Ereignis originalEreignis)
    Ereignis transformiertesEreignis = galileitransformation.transformiere(originalEreignis);
 
    // Der Koordinatenwert für x muss unverändert sein.
-   assertEquals(originalEreignis.getX(), transformiertesEreignis.getX());
+   assertEquals(originalEreignis.x(), transformiertesEreignis.x());
    }
 
 // =====================================================================================================================
@@ -126,14 +126,14 @@ void testTransformiere3(Ereignis originalEreignis, double geschwindigkeit)
 
    // Ein zufälliges Ereignis mit t=0 wird erzeugt.
    Quantity<Time> tQuantity = StandardGalileitransformationTest.timeFactory.create(0.0, Units.SECOND);
-   double x = originalEreignis.getX();
+   double x = originalEreignis.x();
    Ereignis modifiziertesOriginalEreignis = new Ereignis(tQuantity, x);
 
    // Die zu testende Methode wird aufgerufen.
    Ereignis transformiertesEreignis = galileitransformation.transformiere(modifiziertesOriginalEreignis);
 
    // Der Koordinatenwert für x muss unverändert sein.
-   assertEquals(originalEreignis.getX(), transformiertesEreignis.getX());
+   assertEquals(originalEreignis.x(), transformiertesEreignis.x());
    }
 
 // =====================================================================================================================
@@ -161,10 +161,10 @@ void testTransformiere4(Ereignis originalEreignis, double geschwindigkeit)
    Ereignis transformiertesEreignis = ruecktransformation.transformiere(temporaeresEreignis);
 
    // Alle Koordinatenwerte müssen unverändert sein.
-   double tOriginal = originalEreignis.getT().toSystemUnit().getValue().doubleValue();
-   double tTransformiert = transformiertesEreignis.getT().toSystemUnit().getValue().doubleValue();
+   double tOriginal = originalEreignis.t().toSystemUnit().getValue().doubleValue();
+   double tTransformiert = transformiertesEreignis.t().toSystemUnit().getValue().doubleValue();
    assertEquals(tOriginal, tTransformiert, abs(tOriginal * 1E-9));
-   assertEquals(originalEreignis.getX(), transformiertesEreignis.getX(), abs(originalEreignis.getX() * 1E-9));
+   assertEquals(originalEreignis.x(), transformiertesEreignis.x(), abs(originalEreignis.x() * 1E-9));
    }
 
 // =====================================================================================================================
@@ -201,10 +201,10 @@ void testTransformiere5()
    Ereignis transformiertesEreignis4 = galileitransformation.transformiere(originalEreignis4);
    
    // Die x-Koordinate wurde korrekt transformiert.
-   assertEquals(1.0, transformiertesEreignis1.getX(), 1.0 * 1E-9);
-   assertEquals(5.0, transformiertesEreignis2.getX(), 5.0 * 1E-9);
-   assertEquals(-19.0, transformiertesEreignis3.getX(), 19.0 * 1E-9);
-   assertEquals(-1.0, transformiertesEreignis4.getX(), 1.0 * 1E-9);
+   assertEquals(1.0, transformiertesEreignis1.x(), 1.0E-9);
+   assertEquals(5.0, transformiertesEreignis2.x(), 5.0E-9);
+   assertEquals(-19.0, transformiertesEreignis3.x(), 19.0E-9);
+   assertEquals(-1.0, transformiertesEreignis4.x(), 1.0E-9);
    }
 
 // =====================================================================================================================
@@ -225,7 +225,7 @@ private static Arguments[] ereignisseUndGeschwindigkeitenLiefern()
    // Der Zufallszahlengenerator erhält bei jedem Aufruf denselben Samen, damit jedes Mal dieselbe Liste erzeugt wird.
    Random random = new Random(2L);
    List<Double> geschwindigkeiten = random.doubles(StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE, -100, 100)
-      .boxed().collect(Collectors.toList());
+      .boxed().toList();
 
    // Das Feld mit den Argumenten wird erzeugt. Das erste Argument ist ein Ereignis, das zweite Argument ein Double
    // Geschwindigkeit.
@@ -252,7 +252,7 @@ private static Ereignis[] ereignisseLiefern()
    // jedes Mal dieselbe Liste erzeugt wird.
    Random random = new Random(1L);
    List<Double> zufallszahlen = random.doubles(2 * StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE, -100, 100)
-      .boxed().collect(Collectors.toList());
+      .boxed().toList();
 
    // Die Ereignisse werden erzeugt und einem Feld von Ereignissen hinzugefügt.
    Ereignis[] ereignisse = new Ereignis[StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE];

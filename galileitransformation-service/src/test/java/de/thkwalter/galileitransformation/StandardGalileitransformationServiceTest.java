@@ -1,12 +1,12 @@
 /**
  * Copyright 2019 Th. K. Walter
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  *    http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +29,7 @@ class StandardGalileitransformationServiceTest
 {
 /**
  * Test für die Methode
- * {@link StandardGalileitransformationService#transformiere(double, double, double, double, double)}. Der Test prüft
+ * {@link StandardGalileitransformationService#transformiere(double, double, double)}. Der Test prüft
  * nach, ob die Funktionsargumente korrekt an die {@link StandardGalileitransformation} übergeben werden.
  */
 @DisplayName("Die Funktionsargumente werden korrekt an die StandardGalileitransformation übergeben.")
@@ -43,8 +43,8 @@ void testTransformiere()
    Ereignis transformiertesEreignis = controller.transformiere(-2.0, 3.0, 1.0);
    
    // Anhand des transformierten Ereignisses wird geprüft, ob die Funktionsargumente korrekt verarbeitet werden.
-   double tTransformiert = transformiertesEreignis.getT().toSystemUnit().getValue().doubleValue();
+   double tTransformiert = transformiertesEreignis.t().toSystemUnit().getValue().doubleValue();
    assertEquals(-2.0, tTransformiert, 2.0 * 1E-9);
-   assertEquals(5.0, transformiertesEreignis.getX(), 5.0 * 1E-9);
+   assertEquals(5.0, transformiertesEreignis.x(), 5.0 * 1E-9);
    }
 }
