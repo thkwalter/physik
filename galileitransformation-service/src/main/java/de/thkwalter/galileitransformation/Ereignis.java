@@ -16,6 +16,7 @@
 package de.thkwalter.galileitransformation;
 
 import javax.measure.Quantity;
+import javax.measure.quantity.Length;
 import javax.measure.quantity.Time;
 
 /**
@@ -24,6 +25,6 @@ import javax.measure.quantity.Time;
  * @author Thomas K. Walter
  *
  * @param t Die Zeitkoordinate
- * @param x Die x-koordinate (in m)
+ * @param x Die x-Koordinate
  */
-public record Ereignis (Quantity<Time> t, double x) {}
+public record Ereignis (Quantity<Time> t,Quantity<Length> x) {}

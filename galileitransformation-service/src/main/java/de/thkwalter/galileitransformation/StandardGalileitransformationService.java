@@ -1,12 +1,12 @@
 /**
  * Copyright 2019 Th. K. Walter
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  *    http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,7 @@
 package de.thkwalter.galileitransformation;
 
 import javax.measure.Quantity;
+import javax.measure.quantity.Length;
 import javax.measure.quantity.Time;
 import javax.measure.spi.QuantityFactory;
 import javax.measure.spi.ServiceProvider;
@@ -34,8 +35,11 @@ import tech.units.indriya.unit.Units;
 @RestController
 public class StandardGalileitransformationService
 {
-/** Mit Hilfe dieser Factory lassen sich {@link Quantity}--Objekte für Zeitangaben erstellen */
+/** Mithilfe dieser Factory lassen sich {@link Quantity}--Objekte für Zeitangaben erstellen */
 private static QuantityFactory<Time> timeFactory;
+
+/** Mithilfe dieser Factory lassen sich {@link Quantity}--Objekte für L&auml;ngenangaben erstellen */
+private static QuantityFactory<Length> lengthFactory;
 
 // =====================================================================================================================
 // =====================================================================================================================
@@ -47,14 +51,15 @@ public StandardGalileitransformationService()
    {
    ServiceProvider provider = ServiceProvider.current();
    StandardGalileitransformationService.timeFactory = provider.getQuantityFactory(Time.class);
+   StandardGalileitransformationService.lengthFactory = provider.getQuantityFactory(Length.class);
    }
 
 // =====================================================================================================================
 // =====================================================================================================================
 
 /**
- * Transformiert das mittels der Request-Parameter spezifizierte Ereignis. Die Geschwindigkeit der Standard-
- * Galileitransformation wird mit Hilfe des letzten Request-Parameters bestimmt. 
+ * Transformiert das mittels der Request-Parameter spezifizierte Ereignis. Die Geschwindigkeit der
+ * Standard-Galileitransformation wird mithilfe des letzten Request-Parameters bestimmt.
  * 
  * @param t Die Zeitkoordinate (in s)
  * @param x Die x-Koordinate (in m)
@@ -66,11 +71,12 @@ public StandardGalileitransformationService()
 public Ereignis transformiere(@RequestParam(value = "t") double t, @RequestParam(value = "x") double x,
    @RequestParam(value = "v") double v)
    {   
-   // Das originale Ereignis wird mit Hilfe der Request-Parameter erzeugt.
+   // Das originale Ereignis wird mithilfe der Request-Parameter erzeugt.
    Quantity<Time> tQuantity = StandardGalileitransformationService.timeFactory.create(t, Units.SECOND);
-   Ereignis originalEreignis = new Ereignis(tQuantity, x);
+   Quantity<Length> xQuantity = StandardGalileitransformationService.lengthFactory.create(x, Units.METRE);
+   Ereignis originalEreignis = new Ereignis(tQuantity, xQuantity);
    
-   // Die Galileitransformation wird mit Hilfe des letzten Request-Parameters erzeugt.
+   // Die Galileitransformation wird mithilfe des letzten Request-Parameters erzeugt.
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(v);
    
    // Das originale Ereignis wird transformiert und das transformierte Ereignis zurückgegeben.

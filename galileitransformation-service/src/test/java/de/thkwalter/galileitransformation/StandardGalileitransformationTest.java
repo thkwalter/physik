@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import javax.measure.Quantity;
+import javax.measure.quantity.Length;
 import javax.measure.quantity.Time;
 import javax.measure.spi.QuantityFactory;
 import javax.measure.spi.ServiceProvider;
@@ -46,20 +46,24 @@ class StandardGalileitransformationTest
 /** Die Anzahl der Testdatensätze, die durch die verschiedenen {@link MethodSource}-Methoden erzeugt werden **/
 private final static int ANZAHL_TESTDATENSAETZE = 10;
 
-/** Mit Hilfe dieser Factory lassen sich {@link Quantity}--Objekte für Zeitangaben erstellen */
+/** Mithilfe dieser Factory lassen sich {@link Quantity}--Objekte f&uuml;r Zeitangaben erstellen */
 private static QuantityFactory<Time> timeFactory;
+
+/** Mithilfe dieser Factory lassen sich {@link Quantity}--Objekte f&uuml;r L&auml;angaben erstellen */
+private static QuantityFactory<Length> lengthFactory;
 
 // =====================================================================================================================
 // =====================================================================================================================
 
 /**
- * Initialisiert die Factory zur Erzeugung von {@link Quantity}--Objekten für Zeitangaben.
+ * Initialisiert die Factory zur Erzeugung von {@link Quantity}--Objekten f&uuml;r Zeitangaben.
  */
 @BeforeAll
 public static void testSuiteInitialisieren() 
    {
    ServiceProvider provider = ServiceProvider.current();
    StandardGalileitransformationTest.timeFactory = provider.getQuantityFactory(Time.class);
+   StandardGalileitransformationTest.lengthFactory = provider.getQuantityFactory(Length.class);
    }
 
 
@@ -126,8 +130,7 @@ void testTransformiere3(Ereignis originalEreignis, double geschwindigkeit)
 
    // Ein zufälliges Ereignis mit t=0 wird erzeugt.
    Quantity<Time> tQuantity = StandardGalileitransformationTest.timeFactory.create(0.0, Units.SECOND);
-   double x = originalEreignis.x();
-   Ereignis modifiziertesOriginalEreignis = new Ereignis(tQuantity, x);
+   Ereignis modifiziertesOriginalEreignis = new Ereignis(tQuantity, originalEreignis.x());
 
    // Die zu testende Methode wird aufgerufen.
    Ereignis transformiertesEreignis = galileitransformation.transformiere(modifiziertesOriginalEreignis);
@@ -163,8 +166,10 @@ void testTransformiere4(Ereignis originalEreignis, double geschwindigkeit)
    // Alle Koordinatenwerte müssen unverändert sein.
    double tOriginal = originalEreignis.t().toSystemUnit().getValue().doubleValue();
    double tTransformiert = transformiertesEreignis.t().toSystemUnit().getValue().doubleValue();
+   double xOriginal = originalEreignis.x().toSystemUnit().getValue().doubleValue();
+   double xTransformiert = transformiertesEreignis.x().toSystemUnit().getValue().doubleValue();
    assertEquals(tOriginal, tTransformiert, abs(tOriginal * 1E-9));
-   assertEquals(originalEreignis.x(), transformiertesEreignis.x(), abs(originalEreignis.x() * 1E-9));
+   assertEquals(xOriginal, xTransformiert, abs(xOriginal * 1E-9));
    }
 
 // =====================================================================================================================
@@ -183,28 +188,37 @@ void testTransformiere5()
    
    // Vier originale Ereignisse werden erzeugt.
    Quantity<Time> tQuantity1 = StandardGalileitransformationTest.timeFactory.create(1.0, Units.SECOND);
-   Ereignis originalEreignis1 = new Ereignis(tQuantity1, 2.0);
+   Quantity<Length> xQuantity1 = StandardGalileitransformationTest.lengthFactory.create(2.0, Units.METRE);
+   Ereignis originalEreignis1 = new Ereignis(tQuantity1, xQuantity1);
    
    Quantity<Time> tQuantity2 = StandardGalileitransformationTest.timeFactory.create(-2.0, Units.SECOND);
-   Ereignis originalEreignis2 = new Ereignis(tQuantity2, 3.0);
+   Quantity<Length> xQuantity2 = StandardGalileitransformationTest.lengthFactory.create(3.0, Units.METRE);
+   Ereignis originalEreignis2 = new Ereignis(tQuantity2, xQuantity2);
    
    Quantity<Time> tQuantity3 = StandardGalileitransformationTest.timeFactory.create(9.0, Units.SECOND);
-   Ereignis originalEreignis3 = new Ereignis(tQuantity3, -10.0);
+   Quantity<Length> xQuantity3 = StandardGalileitransformationTest.lengthFactory.create(-10.0, Units.METRE);
+   Ereignis originalEreignis3 = new Ereignis(tQuantity3, xQuantity3);
    
    Quantity<Time> tQuantity4 = StandardGalileitransformationTest.timeFactory.create(-13.0, Units.SECOND);
-   Ereignis originalEreignis4 = new Ereignis(tQuantity4, -14.0);
+   Quantity<Length> xQuantity4 = StandardGalileitransformationTest.lengthFactory.create(-14.0, Units.METRE);
+   Ereignis originalEreignis4 = new Ereignis(tQuantity4, xQuantity4);
    
    // Die zu testende Methode wird aufgerufen.
    Ereignis transformiertesEreignis1 = galileitransformation.transformiere(originalEreignis1);
    Ereignis transformiertesEreignis2 = galileitransformation.transformiere(originalEreignis2);
    Ereignis transformiertesEreignis3 = galileitransformation.transformiere(originalEreignis3);
    Ereignis transformiertesEreignis4 = galileitransformation.transformiere(originalEreignis4);
-   
+
+   double xTransformiert1 = transformiertesEreignis1.x().toSystemUnit().getValue().doubleValue();
+   double xTransformiert2 = transformiertesEreignis2.x().toSystemUnit().getValue().doubleValue();
+   double xTransformiert3 = transformiertesEreignis3.x().toSystemUnit().getValue().doubleValue();
+   double xTransformiert4 = transformiertesEreignis4.x().toSystemUnit().getValue().doubleValue();
+
    // Die x-Koordinate wurde korrekt transformiert.
-   assertEquals(1.0, transformiertesEreignis1.x(), 1.0E-9);
-   assertEquals(5.0, transformiertesEreignis2.x(), 5.0E-9);
-   assertEquals(-19.0, transformiertesEreignis3.x(), 19.0E-9);
-   assertEquals(-1.0, transformiertesEreignis4.x(), 1.0E-9);
+   assertEquals(1.0, xTransformiert1, 1.0E-9);
+   assertEquals(5.0, xTransformiert2, 5.0E-9);
+   assertEquals(-19.0, xTransformiert3, 19.0E-9);
+   assertEquals(-1.0, xTransformiert4, 1.0E-9);
    }
 
 // =====================================================================================================================
@@ -261,8 +275,9 @@ private static Ereignis[] ereignisseLiefern()
       double t = zufallszahlen.get(2 * i);
       Quantity<Time> tQuantity = StandardGalileitransformationTest.timeFactory.create(t, Units.SECOND);
       double x = zufallszahlen.get(2 * i + 1);
+      Quantity<Length> xQuantity = StandardGalileitransformationTest.lengthFactory.create(x, Units.METRE);
 
-      ereignisse[i] = new Ereignis(tQuantity, x);
+      ereignisse[i] = new Ereignis(tQuantity, xQuantity);
       }
 
    return ereignisse;

@@ -15,8 +15,14 @@
  */
 package de.thkwalter.galileitransformation;
 
+import tech.units.indriya.unit.Units;
+
 import javax.measure.Quantity;
+import javax.measure.quantity.Length;
+import javax.measure.quantity.Speed;
 import javax.measure.quantity.Time;
+import javax.measure.spi.QuantityFactory;
+import javax.measure.spi.ServiceProvider;
 
 /**
  * Diese Klasse repräsentiert eine Galileitransformation für zwei Koordinatensysteme in der Standardkonfiguration.
@@ -55,17 +61,19 @@ public StandardGalileitransformation(double v)
  */
 public Ereignis transformiere(Ereignis originalEreignis)
    {
-   double x = originalEreignis.x();
-   
-   // Die Zeitkoordinate wird in Sekunden gelesen.
-   Quantity<Time> tQuantity = originalEreignis.t();
-   double t = tQuantity.toSystemUnit().getValue().doubleValue();
+   // Die Geschwindigkeit wird von einem double-Wert in eine Quantity überführt.
+   ServiceProvider provider = ServiceProvider.current();
+   QuantityFactory<Speed> speedFactory = provider.getQuantityFactory(Speed.class);
+   Quantity<Speed> v = speedFactory.create(this.v, Units.METRE_PER_SECOND);
 
-   // Bei einer Standard-Galileitransformation muss nur die x-Koordinate des transformierten Ereignisses berechnet 
+   Quantity<Length> x = originalEreignis.x();
+   Quantity<Time> t = originalEreignis.t();
+
+   // Bei einer Standard-Galileitransformation muss nur die x-Koordinate des transformierten Ereignisses berechnet
    // werden.
-   double x_transformiert = x - v * t;
+   Quantity<Length> xTransformiert = x.subtract(v.multiply(t).asType(Length.class));
 
    // Das transformierte Ereignis wird erstellt und zurückgegeben.
-   return new Ereignis(tQuantity, x_transformiert);
+   return new Ereignis(t, xTransformiert);
    }
 }

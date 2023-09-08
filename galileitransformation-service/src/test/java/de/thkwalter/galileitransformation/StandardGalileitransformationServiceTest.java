@@ -19,6 +19,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tech.units.indriya.unit.Units;
+
+import javax.measure.Quantity;
+import javax.measure.Unit;
+import javax.measure.quantity.Length;
+import javax.measure.quantity.Time;
 
 /**
  * Tests für die Klasse {@link StandardGalileitransformationService}.
@@ -43,8 +49,16 @@ void testTransformiere()
    Ereignis transformiertesEreignis = controller.transformiere(-2.0, 3.0, 1.0);
    
    // Anhand des transformierten Ereignisses wird geprüft, ob die Funktionsargumente korrekt verarbeitet werden.
-   double tTransformiert = transformiertesEreignis.t().toSystemUnit().getValue().doubleValue();
-   assertEquals(-2.0, tTransformiert, 2.0 * 1E-9);
-   assertEquals(5.0, transformiertesEreignis.x(), 5.0 * 1E-9);
+   Quantity<Time> tQuantity = transformiertesEreignis.t();
+   double t = tQuantity.getValue().doubleValue();
+   Unit<Time> tUnit = tQuantity.getUnit();
+   assertEquals(-2.0, t, 2.0 * 1E-9);
+   assertEquals(Units.SECOND, tUnit);
+
+   Quantity<Length> xQuantity = transformiertesEreignis.x();
+   double x = xQuantity.getValue().doubleValue();
+   Unit<Length> xUnit = xQuantity.getUnit();
+   assertEquals(5.0, x, 5.0 * 1E-9);
+   assertEquals(Units.METRE, xUnit);
    }
 }
