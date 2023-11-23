@@ -18,6 +18,7 @@ package de.thkwalter.galileitransformation;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.quantity.Length;
+import javax.measure.quantity.Speed;
 import javax.measure.quantity.Time;
 import javax.measure.spi.QuantityFactory;
 import javax.measure.spi.ServiceProvider;
@@ -29,14 +30,19 @@ public class QuantityHelper
 {
 
 /**
- * Mithilfe dieser {@link QuantityFactory} lassen sich {@link Quantity}--Objekte f&uuml;r Zeitangaben erstellen.
+ * Mithilfe dieser {@link QuantityFactory} lassen sich {@link Quantity}--Objekte für Zeitangaben erstellen.
  */
 private static QuantityFactory<Time> timeFactory;
 
 /**
- * Mithilfe dieser {@link QuantityFactory} lassen sich {@link Quantity}--Objekte f&uuml;r L&auml;ngenangaben erstellen.
+ * Mithilfe dieser {@link QuantityFactory} lassen sich {@link Quantity}--Objekte für Längenangaben erstellen.
  */
 private static QuantityFactory<Length> lengthFactory;
+
+/**
+ * Mithilfe dieser {@link QuantityFactory} lassen sich {@link Quantity}--Objekte für Geschwindigkeitsangaben erstellen.
+ */
+private static QuantityFactory<Speed> speedFactory;
 
 // =====================================================================================================================
 // =====================================================================================================================
@@ -47,6 +53,7 @@ static
    ServiceProvider provider = ServiceProvider.current();
    QuantityHelper.timeFactory = provider.getQuantityFactory(Time.class);
    QuantityHelper.lengthFactory = provider.getQuantityFactory(Length.class);
+   QuantityHelper.speedFactory = provider.getQuantityFactory(Speed.class);
    }
 
 // =====================================================================================================================
@@ -129,5 +136,20 @@ public static Quantity<Time> createTimeQuantity(double masszahl, Unit<Time> einh
 public static Quantity<Length> createLengthQuantity(double masszahl, Unit<Length> einheit)
    {
    return QuantityHelper.lengthFactory.create(masszahl, einheit);
+   }
+
+// =====================================================================================================================
+// =====================================================================================================================
+
+/**
+ * Diese Methode erstellt aus der Maßzahl und der Einheit einer Ortskoordinate ein {@link Quantity}-Objekt.
+ *
+ * @param masszahl die Maßzahl der Geschwindigkeit
+ * @param einheit die Einheit der Geschwindigkeit
+ * @return das erstellte {@link Quantity}-Objekt
+ */
+public static Quantity<Speed> createSpeedQuantity(double masszahl, Unit<Speed> einheit)
+   {
+   return QuantityHelper.speedFactory.create(masszahl, einheit);
    }
 }

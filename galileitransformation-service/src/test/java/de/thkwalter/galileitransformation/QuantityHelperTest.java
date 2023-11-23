@@ -17,17 +17,16 @@ package de.thkwalter.galileitransformation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Length;
+import javax.measure.quantity.Speed;
 import javax.measure.quantity.Time;
 
 import static javax.measure.MetricPrefix.KILO;
 import static javax.measure.MetricPrefix.MILLI;
 import static org.junit.jupiter.api.Assertions.*;
-import static tech.units.indriya.unit.Units.METRE;
-import static tech.units.indriya.unit.Units.SECOND;
+import static tech.units.indriya.unit.Units.*;
 
 /**
  * Diese Klasse enthält JUnit-Tests für die Klasse {@link QuantityHelper}.
@@ -140,5 +139,20 @@ void testCreateLengthQuantity()
    // Es wird geprüft, ob der Zeitwert korrekt erzeugt worden ist.
    assertEquals(-4.0, timeQuantity.toSystemUnit().getValue().doubleValue(),1E-9);
    assertEquals(METRE, timeQuantity.toSystemUnit().getUnit());
+   }
+
+// =====================================================================================================================
+// =====================================================================================================================
+
+@Test
+@DisplayName("Testet die Erzeugung eines Geschwindigkeitswertes")
+void testCreateSpeedQuantity()
+   {
+   // Die zu testende Methode wird aufgerufen.
+   Quantity<Speed> speedQuantity = QuantityHelper.createSpeedQuantity(3.6, KILOMETRE_PER_HOUR);
+
+   // Es wird geprüft, ob der Zeitwert korrekt erzeugt worden ist.
+   assertEquals(1.0, speedQuantity.toSystemUnit().getValue().doubleValue(),1E-6);
+   assertEquals(METRE_PER_SECOND, speedQuantity.toSystemUnit().getUnit());
    }
 }
