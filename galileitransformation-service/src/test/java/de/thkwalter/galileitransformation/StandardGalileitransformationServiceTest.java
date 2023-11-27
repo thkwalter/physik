@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * <p>
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,50 +15,86 @@
  */
 package de.thkwalter.galileitransformation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import com.ibm.icu.impl.Assert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import tech.units.indriya.unit.Units;
 
-import javax.measure.Quantity;
 import javax.measure.Unit;
+import javax.measure.format.MeasurementParseException;
 import javax.measure.quantity.Length;
 import javax.measure.quantity.Time;
 
+import static tech.units.indriya.unit.Units.METRE;
+import static tech.units.indriya.unit.Units.SECOND;
+
 /**
  * Tests für die Klasse {@link StandardGalileitransformationService}.
- * 
+ *
  * @author Th. K. Walter
  */
 class StandardGalileitransformationServiceTest
 {
 /**
  * Test für die Methode
- * {@link StandardGalileitransformationService#transformiere(double, double, double)}. Der Test prüft
+ * {@link StandardGalileitransformationService#transformiere(double, String, double, String, double, String)}. Der Test prüft
  * nach, ob die Funktionsargumente korrekt an die {@link StandardGalileitransformation} übergeben werden.
  */
 @DisplayName("Die Funktionsargumente werden korrekt an die StandardGalileitransformation übergeben.")
 @Test
-void testTransformiere()
+void testTransformiere1()
+   {
+   // Die Testdaten werden intialisiert.
+   double tMasszahl = -2.0;
+   Unit<Time> tEinheit = SECOND;
+   double xMasszahl = 3.0;
+   Unit<Length> xEinheit = METRE;
+   double vMasszahl = 1.0;
+   String vSymbol = "m/s";
+   Ereignis sollEreignis = EreignisHelper.erzeugeEreignis(tMasszahl, tEinheit, xMasszahl, xEinheit);
+
+   // Ein Objekt der zu testenden Klasse wird erzeugt.
+   StandardGalileitransformationService controller = new StandardGalileitransformationService();
+
+   // Die zu testende Methode wird aufgerufen.
+   Ereignis transformiertesEreignis = controller.transformiere(tMasszahl, tEinheit.getSymbol(), xMasszahl,
+         xEinheit.getSymbol(), vMasszahl, vSymbol);
+
+   double tTransMasszahl = transformiertesEreignis.t().getValue().doubleValue();
+   String tTransSymbol = transformiertesEreignis.t().getUnit().getSymbol();
+   double xTransMasszahl = transformiertesEreignis.x().getValue().doubleValue();
+   String xTransSymbol = transformiertesEreignis.x().getUnit().getSymbol();
+
+   // Die Rücktransformation wird ausgeführt
+   Ereignis istEreignis = controller.transformiere(tTransMasszahl, tTransSymbol, xTransMasszahl, xTransSymbol,
+         -vMasszahl, vSymbol);
+
+   // Soll- und Ist-Ereignis werden verglichen.
+   EreignisHelper.compareEreignisse(sollEreignis, istEreignis, 1E-9, 1E-9, 1E-9, 1E-9);
+   }
+
+// =====================================================================================================================
+// =====================================================================================================================
+
+/**
+ * Test für die Methode
+ * {@link StandardGalileitransformationService#transformiere(double, String, double, String, double, String)}. Der Test prüft
+ * nach, ob die Funktionsargumente korrekt an die {@link StandardGalileitransformation} übergeben werden.
+ */
+@DisplayName("Der Test prüft das Verhalten, wenn das Symbol für eine Einheit nicht erkannt wird.")
+@Test
+void testTransformiere2()
    {
    // Ein Objekt der zu testenden Klasse wird erzeugt.
    StandardGalileitransformationService controller = new StandardGalileitransformationService();
-   
-   // Die zu testende Methode wird aufgerufen.
-   Ereignis transformiertesEreignis = controller.transformiere(-2.0, 3.0, 1.0);
-   
-   // Anhand des transformierten Ereignisses wird geprüft, ob die Funktionsargumente korrekt verarbeitet werden.
-   Quantity<Time> tQuantity = transformiertesEreignis.t();
-   double t = tQuantity.getValue().doubleValue();
-   Unit<Time> tUnit = tQuantity.getUnit();
-   assertEquals(-2.0, t, 2.0 * 1E-9);
-   assertEquals(Units.SECOND, tUnit);
 
-   Quantity<Length> xQuantity = transformiertesEreignis.x();
-   double x = xQuantity.getValue().doubleValue();
-   Unit<Length> xUnit = xQuantity.getUnit();
-   assertEquals(5.0, x, 5.0 * 1E-9);
-   assertEquals(Units.METRE, xUnit);
+   try
+      {
+      controller.transformiere(1.0, "t", 2.0, "s", 3.0, "m:s");
+      Assert.fail("Eine MeasurementParseException hätte geworfen werden müssen");
+      }
+   catch (MeasurementParseException e)
+      {
+      // Der Test war erfolgreich.
+      }
    }
 }

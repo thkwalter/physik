@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * <p>
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,70 +15,106 @@
  */
 package de.thkwalter.galileitransformation;
 
-import static java.lang.Math.abs;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.List;
-import java.util.Random;
-
-import javax.measure.Quantity;
-import javax.measure.Unit;
-import javax.measure.quantity.Length;
-import javax.measure.quantity.Time;
-import javax.measure.spi.QuantityFactory;
-import javax.measure.spi.ServiceProvider;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
 import tech.units.indriya.unit.Units;
+
+import javax.measure.Quantity;
+import javax.measure.quantity.Length;
+import javax.measure.quantity.Speed;
+import javax.measure.quantity.Time;
+import java.util.List;
+import java.util.Random;
+
+import static tech.units.indriya.unit.Units.METRE_PER_SECOND;
 
 /**
  * Tests für die Klasse {@link StandardGalileitransformation}.
- * 
+ *
  * @author Th. K. Walter
  */
 class StandardGalileitransformationTest
 {
-/** Die Anzahl der Testdatensätze, die durch die verschiedenen {@link MethodSource}-Methoden erzeugt werden **/
+/**
+ * Die Anzahl der Testdatensätze, die durch die verschiedenen {@link MethodSource}-Methoden erzeugt werden
+ **/
 private final static int ANZAHL_TESTDATENSAETZE = 10;
-
-/** Mithilfe dieser Factory lassen sich {@link Quantity}--Objekte f&uuml;r Zeitangaben erstellen */
-private static QuantityFactory<Time> timeFactory;
-
-/** Mithilfe dieser Factory lassen sich {@link Quantity}--Objekte f&uuml;r L&auml;ngenangaben erstellen */
-private static QuantityFactory<Length> lengthFactory;
 
 // =====================================================================================================================
 // =====================================================================================================================
 
 /**
- * Initialisiert die Factory zur Erzeugung von {@link Quantity}--Objekten f&uuml;r Zeitangaben.
+ * Erzeugt bei jedem Aufruf ein Feld von {@link Arguments}-Objekten bestehend aus zufälligen Ereignissen und
+ * Geschwindigkeiten.
+ *
+ * @return ein Feld von {@link Arguments}-Objekten. Das erste Argument ist jeweils ein Ereignis, das zweite Argument
+ * ein {@link Double} (Geschwindigkeit)
  */
-@BeforeAll
-public static void testSuiteInitialisieren() 
+private static Arguments[] ereignisseUndGeschwindigkeitenLiefern()
    {
-   ServiceProvider provider = ServiceProvider.current();
-   StandardGalileitransformationTest.timeFactory = provider.getQuantityFactory(Time.class);
-   StandardGalileitransformationTest.lengthFactory = provider.getQuantityFactory(Length.class);
+   // Ein Feld mit zufälligen Ereignissen wird geholt.
+   Ereignis[] ereignisse = StandardGalileitransformationTest.ereignisseLiefern();
+
+   // Der Zufallszahlengenerator erhält bei jedem Aufruf denselben Samen, damit jedes Mal dieselbe Liste erzeugt wird.
+   Random random = new Random(2L);
+   List<Double> geschwindigkeiten = random.doubles(StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE, -100,
+         100).boxed().toList();
+
+   // Das Feld mit den Argumenten wird erzeugt. Das erste Argument ist ein Ereignis, das zweite Argument ein Double
+   // Geschwindigkeit.
+   Arguments[] argumente = new Arguments[StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE];
+   for (int i = 0; i < StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE; i++)
+      {
+      Quantity<Speed> v = QuantityHelper.createSpeedQuantity(geschwindigkeiten.get(i), METRE_PER_SECOND);
+      argumente[i] = Arguments.of(ereignisse[i], v);
+      }
+
+   return argumente;
    }
 
+// =====================================================================================================================
+// =====================================================================================================================
 
-// =====================================================================================================================
-// =====================================================================================================================
+/**
+ * Erzeugt bei jedem Aufruf dasselbe Feld von zufälligen Ereignissen.
+ *
+ * @return ein Feld von {@link Ereignis}-Objekten
+ */
+private static Ereignis[] ereignisseLiefern()
+   {
+   // Der Zufallszahlengenerator erhält bei jedem Aufruf denselben Samen, damit
+   // jedes Mal dieselbe Liste erzeugt wird.
+   Random random = new Random(1L);
+   List<Double> zufallszahlen = random.doubles(2 * StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE, -100,
+         100).boxed().toList();
+
+   // Die Ereignisse werden erzeugt und einem Feld von Ereignissen hinzugefügt.
+   Ereignis[] ereignisse = new Ereignis[StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE];
+   for (int i = 0; i < StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE; i++)
+      {
+      double tMasszahl = zufallszahlen.get(2 * i);
+      double xMasszahl = zufallszahlen.get(2 * i + 1);
+      ereignisse[i] = EreignisHelper.erzeugeEreignis(tMasszahl, Units.SECOND, xMasszahl, Units.METRE);
+      }
+
+   return ereignisse;
+   }
+
+// ==================================================================================================================
+// ==================================================================================================================
 
 /**
  * Test für die Methode {@link StandardGalileitransformation#transformiere(Ereignis)}. Der Test prüft nach, dass bei
- * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinate t immer unverändert bleibt.
+ * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinate t immer unverändert
+ * bleibt.
  */
 @DisplayName("t bleibt immer unverändert")
 @ParameterizedTest
 @MethodSource("ereignisseUndGeschwindigkeitenLiefern")
-void testTransformiere1(Ereignis originalEreignis, double geschwindigkeit)
+void testTransformiere1(Ereignis originalEreignis, Quantity<Speed> geschwindigkeit)
    {
    // Eine Standard-Galileitransformation wird erzeugt.
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(geschwindigkeit);
@@ -87,7 +123,7 @@ void testTransformiere1(Ereignis originalEreignis, double geschwindigkeit)
    Ereignis transformiertesEreignis = galileitransformation.transformiere(originalEreignis);
 
    // Die Zeitkoordinate muss unverändert sein.
-   StandardGalileitransformationTest.compareQuantities(originalEreignis.t(), transformiertesEreignis.t());
+   QuantityHelper.compareQuantities(originalEreignis.t(), transformiertesEreignis.t(), 1E+9, 1E-9);
    }
 
 // =====================================================================================================================
@@ -95,8 +131,8 @@ void testTransformiere1(Ereignis originalEreignis, double geschwindigkeit)
 
 /**
  * Test für die Methode {@link StandardGalileitransformation#transformiere(Ereignis)}. Der Test prüft nach, dass bei
- * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinate x unverändert bleibt, falls
- * v = 0 gilt.
+ * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinate x unverändert bleibt,
+ * falls v = 0 gilt.
  */
 @DisplayName("x bleibt unverändert, falls v = 0")
 @ParameterizedTest
@@ -104,13 +140,14 @@ void testTransformiere1(Ereignis originalEreignis, double geschwindigkeit)
 void testTransformiere2(Ereignis originalEreignis)
    {
    // Eine Standard-Galileitransformation für die Geschwindigkeit v = 0 wird erzeugt.
-   StandardGalileitransformation galileitransformation = new StandardGalileitransformation(0.0);
+   Quantity<Speed> v = QuantityHelper.createSpeedQuantity(0.0, METRE_PER_SECOND);
+   StandardGalileitransformation galileitransformation = new StandardGalileitransformation(v);
 
    // Die zu testende Methode wird aufgerufen.
    Ereignis transformiertesEreignis = galileitransformation.transformiere(originalEreignis);
 
    // Der Koordinatenwert für x muss unverändert sein.
-   StandardGalileitransformationTest.compareQuantities(originalEreignis.x(), transformiertesEreignis.x());
+   QuantityHelper.compareQuantities(originalEreignis.x(), transformiertesEreignis.x(), 1E-9, 1E-9);
    }
 
 // =====================================================================================================================
@@ -118,26 +155,26 @@ void testTransformiere2(Ereignis originalEreignis)
 
 /**
  * Test für die Methode {@link StandardGalileitransformation#transformiere(Ereignis)}. Der Test prüft nach, dass bei
- * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinate x unverändert bleibt, falls
- * t = 0 gilt.
+ * einer Galileitransformation von zwei Systemen in der Standardkonfiguration die Koordinate x unverändert bleibt,
+ * falls t = 0 gilt.
  */
 @DisplayName("x bleibt unverändert, falls t = 0")
 @ParameterizedTest
 @MethodSource("ereignisseUndGeschwindigkeitenLiefern")
-void testTransformiere3(Ereignis originalEreignis, double geschwindigkeit)
+void testTransformiere3(Ereignis originalEreignis, Quantity<Speed> geschwindigkeit)
    {
    // Eine StandardGalileitransformation wird erzeugt.
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(geschwindigkeit);
 
    // Ein zufälliges Ereignis mit t=0 wird erzeugt.
-   Quantity<Time> tQuantity = StandardGalileitransformationTest.timeFactory.create(0.0, Units.SECOND);
+   Quantity<Time> tQuantity = QuantityHelper.createTimeQuantity(0.0, Units.SECOND);
    Ereignis modifiziertesOriginalEreignis = new Ereignis(tQuantity, originalEreignis.x());
 
    // Die zu testende Methode wird aufgerufen.
    Ereignis transformiertesEreignis = galileitransformation.transformiere(modifiziertesOriginalEreignis);
 
    // Der Koordinatenwert für x muss unverändert sein.
-   StandardGalileitransformationTest.compareQuantities(originalEreignis.x(), transformiertesEreignis.x());
+   QuantityHelper.compareQuantities(originalEreignis.x(), transformiertesEreignis.x(), 1E-9, 1E-9);
    }
 
 // =====================================================================================================================
@@ -150,27 +187,27 @@ void testTransformiere3(Ereignis originalEreignis, double geschwindigkeit)
 @DisplayName("Alle Koordinaten bleiben nach Transformation und Rücktransformation unverändert")
 @ParameterizedTest
 @MethodSource("ereignisseUndGeschwindigkeitenLiefern")
-void testTransformiere4(Ereignis originalEreignis, double geschwindigkeit)
+void testTransformiere4(Ereignis originalEreignis, Quantity<Speed> geschwindigkeit)
    {
    // Eine StandardGalileitransformation wird erzeugt.
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(geschwindigkeit);
 
    // Die Rücktransformation wird erzeugt.
-   StandardGalileitransformation ruecktransformation = new StandardGalileitransformation(-geschwindigkeit);
+   StandardGalileitransformation ruecktransformation =
+         new StandardGalileitransformation(geschwindigkeit.multiply(-1.0));
 
    // Die Galileitransformation wird ausgeführt.
    Ereignis temporaeresEreignis = galileitransformation.transformiere(originalEreignis);
-   
+
    // Die Rücktransformation wird ausgeführt.
    Ereignis transformiertesEreignis = ruecktransformation.transformiere(temporaeresEreignis);
 
-   // Alle Koordinatenwerte müssen unverändert sein.
-   StandardGalileitransformationTest.compareQuantities(originalEreignis.x(), transformiertesEreignis.x());
-   StandardGalileitransformationTest.compareQuantities(originalEreignis.t(), transformiertesEreignis.t());
+   // Die Ereignisse werden verglichen
+   EreignisHelper.compareEreignisse(originalEreignis, transformiertesEreignis, 1E-9, 1E-9, 1E-9, 1E-9);
    }
 
-// =====================================================================================================================
-// =====================================================================================================================
+// ==================================================================================================================
+// ==================================================================================================================
 
 /**
  * Test für die Methode {@link StandardGalileitransformation#transformiere(Ereignis)}. Der Test prüft für vier Fälle
@@ -181,29 +218,22 @@ void testTransformiere4(Ereignis originalEreignis, double geschwindigkeit)
 void testTransformiere5()
    {
    // Eine StandardGalileitransformation wird erzeugt.
-   StandardGalileitransformation galileitransformation = new StandardGalileitransformation(1.0);
-   
+   Quantity<Speed> v = QuantityHelper.createSpeedQuantity(1.0, METRE_PER_SECOND);
+   StandardGalileitransformation galileitransformation = new StandardGalileitransformation(v);
+
    // Vier originale Ereignisse werden erzeugt.
-   Quantity<Time> tQuantity1 = StandardGalileitransformationTest.timeFactory.create(1.0, Units.SECOND);
-   Quantity<Length> xQuantity1 = StandardGalileitransformationTest.lengthFactory.create(2.0, Units.METRE);
-   Quantity<Length> xSollQuantity1 = StandardGalileitransformationTest.lengthFactory.create(1.0, Units.METRE);
-   Ereignis originalEreignis1 = new Ereignis(tQuantity1, xQuantity1);
-   
-   Quantity<Time> tQuantity2 = StandardGalileitransformationTest.timeFactory.create(-2.0, Units.SECOND);
-   Quantity<Length> xQuantity2 = StandardGalileitransformationTest.lengthFactory.create(3.0, Units.METRE);
-   Quantity<Length> xSollQuantity2 = StandardGalileitransformationTest.lengthFactory.create(5.0, Units.METRE);
-   Ereignis originalEreignis2 = new Ereignis(tQuantity2, xQuantity2);
-   
-   Quantity<Time> tQuantity3 = StandardGalileitransformationTest.timeFactory.create(9.0, Units.SECOND);
-   Quantity<Length> xQuantity3 = StandardGalileitransformationTest.lengthFactory.create(-10.0, Units.METRE);
-   Quantity<Length> xSollQuantity3 = StandardGalileitransformationTest.lengthFactory.create(-19.0, Units.METRE);
-   Ereignis originalEreignis3 = new Ereignis(tQuantity3, xQuantity3);
-   
-   Quantity<Time> tQuantity4 = StandardGalileitransformationTest.timeFactory.create(-13.0, Units.SECOND);
-   Quantity<Length> xQuantity4 = StandardGalileitransformationTest.lengthFactory.create(-14.0, Units.METRE);
-   Quantity<Length> xSollQuantity4 = StandardGalileitransformationTest.lengthFactory.create(-1.0, Units.METRE);
-   Ereignis originalEreignis4 = new Ereignis(tQuantity4, xQuantity4);
-   
+   Quantity<Length> xSollQuantity1 = QuantityHelper.createLengthQuantity(1.0, Units.METRE);
+   Ereignis originalEreignis1 = EreignisHelper.erzeugeEreignis(1.0, Units.SECOND, 1.0, Units.METRE);
+
+   Quantity<Length> xSollQuantity2 = QuantityHelper.createLengthQuantity(5.0, Units.METRE);
+   Ereignis originalEreignis2 = EreignisHelper.erzeugeEreignis(-2.0, Units.SECOND, 3.0, Units.METRE);
+
+   Quantity<Length> xSollQuantity3 = QuantityHelper.createLengthQuantity(-19.0, Units.METRE);
+   Ereignis originalEreignis3 = EreignisHelper.erzeugeEreignis(9.0, Units.SECOND, -10.0, Units.METRE);
+
+   Quantity<Length> xSollQuantity4 = QuantityHelper.createLengthQuantity(-1.0, Units.METRE);
+   Ereignis originalEreignis4 = EreignisHelper.erzeugeEreignis(-13.0, Units.SECOND, -14.0, Units.METRE);
+
    // Die zu testende Methode wird aufgerufen.
    Ereignis transformiertesEreignis1 = galileitransformation.transformiere(originalEreignis1);
    Ereignis transformiertesEreignis2 = galileitransformation.transformiere(originalEreignis2);
@@ -211,96 +241,9 @@ void testTransformiere5()
    Ereignis transformiertesEreignis4 = galileitransformation.transformiere(originalEreignis4);
 
    // Die x-Koordinate wurde korrekt transformiert.
-   StandardGalileitransformationTest.compareQuantities(transformiertesEreignis1.x(), xSollQuantity1);
-   StandardGalileitransformationTest.compareQuantities(transformiertesEreignis2.x(), xSollQuantity2);
-   StandardGalileitransformationTest.compareQuantities(transformiertesEreignis3.x(), xSollQuantity3);
-   StandardGalileitransformationTest.compareQuantities(transformiertesEreignis4.x(), xSollQuantity4);
+   QuantityHelper.compareQuantities(transformiertesEreignis1.x(), xSollQuantity1, 1E-9, 1E-9);
+   QuantityHelper.compareQuantities(transformiertesEreignis2.x(), xSollQuantity2, 1E-9, 1E-9);
+   QuantityHelper.compareQuantities(transformiertesEreignis3.x(), xSollQuantity3, 1E-9, 1E-9);
+   QuantityHelper.compareQuantities(transformiertesEreignis4.x(), xSollQuantity4, 1E-9, 1E-9);
    }
-
-// =====================================================================================================================
-// =====================================================================================================================
-
-/**
- * Erzeugt bei jedem Aufruf ein Feld von {@link Arguments}-Objekten bestehend aus zufälligen Ereignissen und
- * Geschwindigkeiten.
- * 
- * @return ein Feld von {@link Arguments}-Objekten. Das erste Argument ist jeweils ein Ereignis, das zweite Argument ein
- *         {@link Double} (Geschwindigkeit)
- */
-private static Arguments[] ereignisseUndGeschwindigkeitenLiefern()
-   {
-   // Ein Feld mit zufälligen Ereignissen wird geholt.
-   Ereignis[] ereignisse = StandardGalileitransformationTest.ereignisseLiefern();
-
-   // Der Zufallszahlengenerator erhält bei jedem Aufruf denselben Samen, damit jedes Mal dieselbe Liste erzeugt wird.
-   Random random = new Random(2L);
-   List<Double> geschwindigkeiten = random.doubles(StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE, -100, 100)
-      .boxed().toList();
-
-   // Das Feld mit den Argumenten wird erzeugt. Das erste Argument ist ein Ereignis, das zweite Argument ein Double
-   // Geschwindigkeit.
-   Arguments[] argumente = new Arguments[StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE];
-   for (int i = 0; i < StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE; i++)
-      {
-      argumente[i] = Arguments.of(ereignisse[i], geschwindigkeiten.get(i));
-      }
-
-   return argumente;
-   }
-
-// =====================================================================================================================
-// =====================================================================================================================
-
-/**
- * Erzeugt bei jedem Aufruf dasselbe Feld von zufälligen Ereignissen.
- * 
- * @return ein Feld von {@link Ereignis}-Objekten
- */
-private static Ereignis[] ereignisseLiefern()
-   {
-   // Der Zufallszahlengenerator erhält bei jedem Aufruf denselben Samen, damit
-   // jedes Mal dieselbe Liste erzeugt wird.
-   Random random = new Random(1L);
-   List<Double> zufallszahlen = random.doubles(2 * StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE, -100, 100)
-      .boxed().toList();
-
-   // Die Ereignisse werden erzeugt und einem Feld von Ereignissen hinzugefügt.
-   Ereignis[] ereignisse = new Ereignis[StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE];
-   for (int i = 0; i < StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE; i++)
-      {
-      double t = zufallszahlen.get(2 * i);
-      Quantity<Time> tQuantity = StandardGalileitransformationTest.timeFactory.create(t, Units.SECOND);
-      double x = zufallszahlen.get(2 * i + 1);
-      Quantity<Length> xQuantity = StandardGalileitransformationTest.lengthFactory.create(x, Units.METRE);
-
-      ereignisse[i] = new Ereignis(tQuantity, xQuantity);
-      }
-
-   return ereignisse;
-   }
-
-// =====================================================================================================================
-// =====================================================================================================================
-
-   /**
-    * Diese Methode vergleicht zwei {@link Quantity}--Objekte. Die Werte werden als "gleich" akzeptiert, falls die
-    * relative Abweichung geringer als 10E-9 ist.
-    * @param erwarteteGroesse Der Soll-Wert der die Größe
-    * @param errechneteGroesse Der Ist-Wert der Größe
-    */
-   private static <Q extends Quantity<?>> void  compareQuantities(Q erwarteteGroesse, Q errechneteGroesse)
-   {
-      Quantity<?> erwarteteGroesseSI = erwarteteGroesse.toSystemUnit();
-      Quantity<?> errechneteGroesseSI = errechneteGroesse.toSystemUnit();
-
-      double erwarteterWert = erwarteteGroesseSI.getValue().doubleValue();
-      double errechneterWert = errechneteGroesseSI.getValue().doubleValue();
-      
-      Unit<?> erwarteteUnit = erwarteteGroesseSI.getUnit();
-      Unit<?> errechneteUnit = errechneteGroesseSI.getUnit();
-
-      assertEquals(erwarteterWert, errechneterWert, abs(erwarteterWert * 1E-9));
-      assertEquals(erwarteteUnit, errechneteUnit);
-   }
-
 }
