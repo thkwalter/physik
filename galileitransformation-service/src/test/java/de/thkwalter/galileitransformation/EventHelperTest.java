@@ -34,7 +34,7 @@ import static tech.units.indriya.unit.Units.SECOND;
 /**
  * Diese Klasse enthält JUnit-Tests für die Klasse {@link EreignisHelper}.
  */
-class EreignisHelperTest
+class EventHelperTest
 {
 @Test
 @DisplayName("Ereignis wird korrekt erzeugt")
@@ -51,11 +51,11 @@ void testErzeugeEreignis()
    Quantity<Length> sollWertX = QuantityHelper.createLengthQuantity(xMasszahl, xEinheit);
 
    // Die zu testende Methode wird aufgerufen.
-   Ereignis ereignis = EreignisHelper.erzeugeEreignis(tMasszahl, tEinheit, xMasszahl, xEinheit);
+   Event event = EreignisHelper.erzeugeEreignis(tMasszahl, tEinheit, xMasszahl, xEinheit);
 
    // Es wird geprüft, ob das Ereignis die richtigen Werte für die Orts- und Zeitkoordinate enthält.
-   QuantityHelper.compareQuantities(sollWertT, ereignis.t(), 1E-9, 1E-9);
-   QuantityHelper.compareQuantities(sollWertX, ereignis.x(), 1E-9, 1E-9);
+   QuantityHelper.compareQuantities(sollWertT, event.t(), 1E-9, 1E-9);
+   QuantityHelper.compareQuantities(sollWertX, event.x(), 1E-9, 1E-9);
    }
 
 // =====================================================================================================================
@@ -66,14 +66,14 @@ void testErzeugeEreignis()
 void testCompareEreignisse()
    {
    // Die Testdaten werden intialisiert.
-   Ereignis sollEreignis = EreignisHelper.erzeugeEreignis(2.2, SECOND, 0.0, KILO(METRE));
-   Ereignis istEreignisKorrekt = EreignisHelper.erzeugeEreignis(2200, MILLI(SECOND), 0.0, METRE);
-   Ereignis istEreignisFalsch1 = EreignisHelper.erzeugeEreignis(2.2001, SECOND, 0.0, KILO(METRE));
-   Ereignis istEreignisFalsch2 = EreignisHelper.erzeugeEreignis(2.2, SECOND, 0.001, KILO(METRE));
+   Event sollEvent = EreignisHelper.erzeugeEreignis(2.2, SECOND, 0.0, KILO(METRE));
+   Event istEventKorrekt = EreignisHelper.erzeugeEreignis(2200, MILLI(SECOND), 0.0, METRE);
+   Event istEventFalsch1 = EreignisHelper.erzeugeEreignis(2.2001, SECOND, 0.0, KILO(METRE));
+   Event istEventFalsch2 = EreignisHelper.erzeugeEreignis(2.2, SECOND, 0.001, KILO(METRE));
 
    // Die zu testende Methode wird aufgerufen
-   assertTrue(EreignisHelper.compareEreignisse(sollEreignis, istEreignisKorrekt,1E-9, 1E-9, 1E-9, 1E-9));
-   assertFalse(EreignisHelper.compareEreignisse(sollEreignis, istEreignisFalsch1,1E-9, 1E-9, 1E-9, 1E-9));
-   assertFalse(EreignisHelper.compareEreignisse(sollEreignis, istEreignisFalsch2,1E-9, 1E-9, 1E-9, 1E-9));
+   assertTrue(EreignisHelper.compareEreignisse(sollEvent, istEventKorrekt,1E-9, 1E-9, 1E-9, 1E-9));
+   assertFalse(EreignisHelper.compareEreignisse(sollEvent, istEventFalsch1,1E-9, 1E-9, 1E-9, 1E-9));
+   assertFalse(EreignisHelper.compareEreignisse(sollEvent, istEventFalsch2,1E-9, 1E-9, 1E-9, 1E-9));
    }
 }

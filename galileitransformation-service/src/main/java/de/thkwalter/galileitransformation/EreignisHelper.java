@@ -23,35 +23,35 @@ import javax.measure.quantity.Time;
 public class EreignisHelper
 {
 /**
- * Diese Methode erzeugt aus einer Zeit- und einer Ortskoordniate ein {@link Ereignis}.
+ * Diese Methode erzeugt aus einer Zeit- und einer Ortskoordniate ein {@link Event}.
  *
  * @param tMasszahl die Maßzahl der Zeitkoordinate
  * @param tEinheit  die Einheit der Zeitkoordinate
  * @param xMasszahl die Maßzahl der Ortskoordinate
  * @param xEinheit  die Einheit der Ortskoordinate
- * @return das aus der Zeit- und der Ortskoordinate gebildete {@link Ereignis}.
+ * @return das aus der Zeit- und der Ortskoordinate gebildete {@link Event}.
  */
-public static Ereignis erzeugeEreignis(double tMasszahl, Unit<Time> tEinheit, double xMasszahl, Unit<Length> xEinheit)
+public static Event erzeugeEreignis(double tMasszahl, Unit<Time> tEinheit, double xMasszahl, Unit<Length> xEinheit)
    {
    // Die Quantity-Objekte der beiden Koordinaten werden erzeugt.
    Quantity<Time> t = QuantityHelper.createTimeQuantity(tMasszahl, tEinheit);
    Quantity<Length> x = QuantityHelper.createLengthQuantity(xMasszahl, xEinheit);
 
    // Das Ereignis wird erzeugt und zurückgegeben.
-   return new Ereignis(t, x);
+   return new Event(t, x);
    }
 
 // =====================================================================================================================
 // =====================================================================================================================
 
 /**
- * Diese Methode vergleicht zwei {@link Ereignis}-Objekte und gibt <tt>true</tt> zurück, falls die Zeit- und die
+ * Diese Methode vergleicht zwei {@link Event}-Objekte und gibt <tt>true</tt> zurück, falls die Zeit- und die
  * Ortskoordinaten (innerhalb gegebeber Toleranzbereiche) miteinander übereinstimmen. Zum Vergleich der einzelnen
  * Koordinatenwerte wird die Methode {@link QuantityHelper#compareQuantities(Quantity, Quantity, double, double)}
  * verwendet.
  *
- * @param sollEreignis        das erwartete Ereignis
- * @param istEreignis         das vorhandene Ereignis
+ * @param sollEvent        das erwartete Ereignis
+ * @param istEvent         das vorhandene Ereignis
  * @param relativeAbweichungX die zulässige, relative Abweichung bei der Ortskoordinate
  * @param absoluteAbweichungX die zulässige absolute Abweichung (falls einer der Werte gleich null ist) bei der
  *                            Ortskoordinate
@@ -61,13 +61,13 @@ public static Ereignis erzeugeEreignis(double tMasszahl, Unit<Time> tEinheit, do
  * @return <tt>true</tt>, falls beide Ereignisse im Rahmen der gegebenen Toleranzbereiche übereinstimmen;
  * <tt>false</tt> sonst
  */
-public static boolean compareEreignisse(Ereignis sollEreignis, Ereignis istEreignis, double relativeAbweichungX,
+public static boolean compareEreignisse(Event sollEvent, Event istEvent, double relativeAbweichungX,
       double absoluteAbweichungX, double relativeAbweichungT, double absoluteAbweichungT)
    {
 
    // Die Zeit- und die Ortskoordinaten werden verglichen.
-   return QuantityHelper.compareQuantities(sollEreignis.x(), istEreignis.x(), relativeAbweichungX,
-         absoluteAbweichungX) && QuantityHelper.compareQuantities(sollEreignis.t(), istEreignis.t(),
+   return QuantityHelper.compareQuantities(sollEvent.x(), istEvent.x(), relativeAbweichungX,
+         absoluteAbweichungX) && QuantityHelper.compareQuantities(sollEvent.t(), istEvent.t(),
          relativeAbweichungT, absoluteAbweichungT);
    }
 }

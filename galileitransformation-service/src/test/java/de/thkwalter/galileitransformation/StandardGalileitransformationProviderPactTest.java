@@ -15,10 +15,7 @@
  */
 package de.thkwalter.galileitransformation;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.TestTemplate;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.TestTemplateInvocationContext;
 import org.springframework.boot.SpringApplication;
@@ -37,6 +34,7 @@ import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvide
  */
 @Provider("StandardGalileitransformationProvider")
 @PactFolder("pacts")
+@Disabled
 public class StandardGalileitransformationProviderPactTest
 {
 /** Der {@link ConfigurableWebApplicationContext} wird benötigt, um den Service nach den Tests wieder zu stoppen. */

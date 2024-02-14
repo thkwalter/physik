@@ -51,21 +51,21 @@ public StandardGalileitransformation(Quantity<Speed> v)
 /**
  * Transformiert ein Ereignis.
  *
- * @param originalEreignis das originale Ereignis
+ * @param originalEvent das originale Ereignis
  *
  * @return das transformierte Ereignis
  */
-public Ereignis transformiere(Ereignis originalEreignis)
+public Event transformiere(Event originalEvent)
    {
    // Die Orts-- und die Zeitkoordinate werden extrahiert.
-   Quantity<Length> x = originalEreignis.x();
-   Quantity<Time> t = originalEreignis.t();
+   Quantity<Length> x = originalEvent.x();
+   Quantity<Time> t = originalEvent.t();
 
    // Bei einer Standard-Galileitransformation muss nur die x-Koordinate des transformierten Ereignisses berechnet
    // werden.
    Quantity<Length> xTransformiert = x.subtract(v.multiply(t).asType(Length.class));
 
    // Das transformierte Ereignis wird erstellt und zurückgegeben.
-   return new Ereignis(t, xTransformiert);
+   return new Event(t, xTransformiert);
    }
 }

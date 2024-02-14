@@ -25,6 +25,6 @@ import javax.measure.quantity.Time;
  * @author Thomas K. Walter
  *
  * @param t Die Zeitkoordinate
- * @param x Die x-Koordinate
+ * @param x Die Ortskoordinate
  */
-public record Ereignis (Quantity<Time> t,Quantity<Length> x) {}
+public record Event(Quantity<Time> t, Quantity<Length> x) {}

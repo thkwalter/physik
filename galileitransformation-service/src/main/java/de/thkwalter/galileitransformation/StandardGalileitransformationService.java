@@ -26,8 +26,6 @@ import javax.measure.quantity.Length;
 import javax.measure.quantity.Speed;
 import javax.measure.quantity.Time;
 
-import static tech.units.indriya.unit.Units.METRE_PER_SECOND;
-
 /**
  * Diese Klasse implementiert den Endpunkt des StandardGalileitransformation-Services.
  *
@@ -45,10 +43,10 @@ public class StandardGalileitransformationService
  * @param xMasszahl die Maßzahl der Ortskoordinate
  * @param xEinheit  Die Einheit der Ortskoordinate
  * @param vMasszahl Die Maßzahl der Geschwindigkeit
- * @return Das transformierte {@link Ereignis}
+ * @return Das transformierte {@link Event}
  */
 @RequestMapping("/transformiere")
-public Ereignis transformiere(@RequestParam(value = "tMasszahl") double tMasszahl,
+public Event transformiere(@RequestParam(value = "tMasszahl") double tMasszahl,
       @RequestParam(value = "tEinheit") String tEinheit, @RequestParam(value = "xMasszahl") double xMasszahl,
       @RequestParam(value = "xEinheit") String xEinheit, @RequestParam(value = "vMasszahl") double vMasszahl,
       @RequestParam(value = "vEinheit") String vEinheit)
@@ -59,13 +57,13 @@ public Ereignis transformiere(@RequestParam(value = "tMasszahl") double tMasszah
    Unit<Speed> vUnit = AbstractUnit.parse(vEinheit).asType(Speed.class);
 
    // Das originale Ereignis wird mithilfe der Request-Parameter erzeugt.
-   Ereignis originalEreignis = EreignisHelper.erzeugeEreignis(tMasszahl, tUnit, xMasszahl, xUnit);
+   Event originalEvent = EreignisHelper.erzeugeEreignis(tMasszahl, tUnit, xMasszahl, xUnit);
 
    // Die Galileitransformation wird mithilfe des letzten Request-Parameters erzeugt.
    Quantity<Speed> v = QuantityHelper.createSpeedQuantity(vMasszahl, vUnit);
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(v);
 
    // Das originale Ereignis wird transformiert und das transformierte Ereignis zurückgegeben.
-   return galileitransformation.transformiere(originalEreignis);
+   return galileitransformation.transformiere(originalEvent);
    }
 }

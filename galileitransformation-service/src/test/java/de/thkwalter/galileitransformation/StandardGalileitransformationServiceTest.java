@@ -50,26 +50,26 @@ void testTransformiere1()
    Unit<Length> xEinheit = METRE;
    double vMasszahl = 1.0;
    String vSymbol = "m/s";
-   Ereignis sollEreignis = EreignisHelper.erzeugeEreignis(tMasszahl, tEinheit, xMasszahl, xEinheit);
+   Event sollEvent = EreignisHelper.erzeugeEreignis(tMasszahl, tEinheit, xMasszahl, xEinheit);
 
    // Ein Objekt der zu testenden Klasse wird erzeugt.
    StandardGalileitransformationService controller = new StandardGalileitransformationService();
 
    // Die zu testende Methode wird aufgerufen.
-   Ereignis transformiertesEreignis = controller.transformiere(tMasszahl, tEinheit.getSymbol(), xMasszahl,
+   Event transformiertesEvent = controller.transformiere(tMasszahl, tEinheit.getSymbol(), xMasszahl,
          xEinheit.getSymbol(), vMasszahl, vSymbol);
 
-   double tTransMasszahl = transformiertesEreignis.t().getValue().doubleValue();
-   String tTransSymbol = transformiertesEreignis.t().getUnit().getSymbol();
-   double xTransMasszahl = transformiertesEreignis.x().getValue().doubleValue();
-   String xTransSymbol = transformiertesEreignis.x().getUnit().getSymbol();
+   double tTransMasszahl = transformiertesEvent.t().getValue().doubleValue();
+   String tTransSymbol = transformiertesEvent.t().getUnit().getSymbol();
+   double xTransMasszahl = transformiertesEvent.x().getValue().doubleValue();
+   String xTransSymbol = transformiertesEvent.x().getUnit().getSymbol();
 
    // Die Rücktransformation wird ausgeführt
-   Ereignis istEreignis = controller.transformiere(tTransMasszahl, tTransSymbol, xTransMasszahl, xTransSymbol,
+   Event istEvent = controller.transformiere(tTransMasszahl, tTransSymbol, xTransMasszahl, xTransSymbol,
          -vMasszahl, vSymbol);
 
    // Soll- und Ist-Ereignis werden verglichen.
-   EreignisHelper.compareEreignisse(sollEreignis, istEreignis, 1E-9, 1E-9, 1E-9, 1E-9);
+   EreignisHelper.compareEreignisse(sollEvent, istEvent, 1E-9, 1E-9, 1E-9, 1E-9);
    }
 
 // =====================================================================================================================
