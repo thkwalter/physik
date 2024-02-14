@@ -1,12 +1,12 @@
 /**
- * Copyright 2019 Th. K. Walter
- * <p>
+ * Copyright 2023 Th. K. Walter
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,11 +56,11 @@ public V4Pact transformiere(PactBuilder builder)
    Map<String, String> headers = new HashMap<>();
    headers.put("Content-Type", "application/json");
 
-   String queryString = "v=1&t=-2&x=3";
+   String queryString = "xMasszahl=-0.004&xEinheit=km&tMasszahl=2000&tEinheit=ms&vMasszahl=2&vEinheit=m%2Fs";
 
    return builder.usingLegacyDsl().given("standard").uponReceiving("transformiertes Ereignis").path(
          "/transformiere").query(queryString).method("GET").willRespondWith().headers(headers).status(200).body(
-         new PactDslJsonBody().numberType("t", -2).numberType("x", 5)).toPact(V4Pact.class);
+         new PactDslJsonBody().numberType("t", 2).numberType("x", -6)).toPact(V4Pact.class);
    }
 
 // =====================================================================================================================
@@ -69,28 +69,15 @@ public V4Pact transformiere(PactBuilder builder)
 /**
  * Dieser Test verifiziert, dass die erzeugt Pact-Datei, die Interaktion mit dem Server korrekt beschreibt.
  *
- * @param mockServer der mit Hilfe der Pact-Datei erzeugte Server-Mock
+ * @param mockServer der mithilfe der Pact-Datei erzeugte Server-Mock
  * @throws IOException
  */
 @Test
 void testTransformiere(MockServer mockServer) throws IOException
    {
    WebTestClient client = WebTestClient.bindToServer().baseUrl(mockServer.getUrl()).build();
-   client.get().uri("/transformiere?t=-2&x=3&v=1").exchange().expectStatus().isOk();
-
-//
-//   // Das JSON im Body wird geparsed.
-//   BufferedReader reader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent(),
-//         StandardCharsets.UTF_8));
-//   String json = reader.readLine();
-//   JSONTokener tokener = new JSONTokener(json);
-//   JSONObject jsonWurzel = new JSONObject(tokener);
-//
-//   // Es wird überprüft, ob der JSON-Body die erwarteten Werte enthält.
-//   assertEquals(jsonWurzel.getDouble("x"), 5);
-//   assertEquals(jsonWurzel.getDouble("t"), -2);
-//
-//   // Es wird überprüft, dass der JSON-Body ausschließlich die erwarteten Werte enthält.
-//   assertEquals(jsonWurzel.keySet().size(), 2);
+   client.get().uri(
+         "/transformiere?xMasszahl=-0.004&xEinheit=km&tMasszahl=2000&tEinheit=ms&vMasszahl=2&vEinheit=m%2Fs").exchange().expectStatus().isOk().expectBody().jsonPath(
+         "$.x").isEqualTo("-6").jsonPath("$.t").isEqualTo("2");
    }
 }

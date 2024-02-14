@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Th. K. Walter
+ * Copyright 2023 Th. K. Walter
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ private static ConfigurableWebApplicationContext application;
 public static void serviceStarten()
    {
    StandardGalileitransformationProviderPactTest.application = (ConfigurableWebApplicationContext) SpringApplication
-      .run(StandardGalileitransformationServer.class);
+      .run(GalileanTransformationServer.class);
    }
 
 // =====================================================================================================================

@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Th. K. Walter
+ * Copyright 2023 Th. K. Walter
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
  */
 package de.thkwalter.jackson;
 
-import java.io.IOException;
-
-import javax.measure.Quantity;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+
+import javax.measure.Quantity;
+import java.io.IOException;
 
 /**
  * Diese Klasse serialisiert {@link Quantity}-Objekte für den Jackson-Serializer.

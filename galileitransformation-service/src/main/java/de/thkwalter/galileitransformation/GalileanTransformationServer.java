@@ -1,5 +1,5 @@
 /**
- * Copyright 2019 Th. K. Walter
+ * Copyright 2023 Th. K. Walter
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,13 @@
  */
 package de.thkwalter.galileitransformation;
 
-import javax.measure.Quantity;
-
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import de.thkwalter.jackson.QuantitySerializer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-
-import de.thkwalter.jackson.QuantitySerializer;
+import javax.measure.Quantity;
 
 /**
  * Diese Klasse startet einen Server, der den {@link StandardGalileitransformation-Services} anbietet.
@@ -32,11 +29,11 @@ import de.thkwalter.jackson.QuantitySerializer;
  * @author Th. K. Walter
  */
 @SpringBootApplication
-public class StandardGalileitransformationServer
+public class GalileanTransformationServer
 {
 public static void main(String[] args)
    {
-   SpringApplication.run(StandardGalileitransformationServer.class, args);
+   SpringApplication.run(GalileanTransformationServer.class, args);
    }
 
 
@@ -50,14 +47,15 @@ public static void main(String[] args)
  * 
  * @return ein {@link SimpleModule} das einen {@link QuantitySerializer} kapselt.
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings("rawtypes")
 @Bean
 public SimpleModule getJacksonQuantityModule()
    {
    // Ein SimpleModule wird erstellt, das einen QuantitySerializer kapselt.
-   SimpleModule module = new SimpleModule("QuantitySerializer", new Version(1, 0, 0, null, null, null));
+   SimpleModule module = new SimpleModule();
+   //noinspection unchecked
    module.addSerializer(Quantity.class, new QuantitySerializer());
-   
+
    return module;
    }
 }
