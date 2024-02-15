@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.thkwalter.galileitransformation;
+package de.thkwalter.galileantransformation;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,7 +60,7 @@ public Event transformiere(@RequestParam(value = "tMasszahl") double tMasszahl,
    Event originalEvent = EreignisHelper.erzeugeEreignis(tMasszahl, tUnit, xMasszahl, xUnit);
 
    // Die Galileitransformation wird mithilfe des letzten Request-Parameters erzeugt.
-   Quantity<Speed> v = QuantityHelper.createSpeedQuantity(vMasszahl, vUnit);
+   Quantity<Speed> v = QuantityUtils.createSpeedQuantity(vMasszahl, vUnit);
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(v);
 
    // Das originale Ereignis wird transformiert und das transformierte Ereignis zurückgegeben.

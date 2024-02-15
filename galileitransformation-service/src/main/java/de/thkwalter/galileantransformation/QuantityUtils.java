@@ -1,19 +1,19 @@
 /**
  * Copyright 2023 Th. K. Walter
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.thkwalter.galileitransformation;
+package de.thkwalter.galileantransformation;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
@@ -24,9 +24,9 @@ import javax.measure.spi.QuantityFactory;
 import javax.measure.spi.ServiceProvider;
 
 /**
- * Diese Klasse besitzt Methoden, um den Umgang mit {@link Quantity}--Objekten zu erleichtern.
+ * Diese Klasse enthält Methoden, um den Umgang mit {@link Quantity}--Objekten zu erleichtern.
  */
-public class QuantityHelper
+public class QuantityUtils
 {
 
 /**
@@ -51,9 +51,10 @@ static
    {
    // Die QuantityFactory-Objekte werden erzeugt.
    ServiceProvider provider = ServiceProvider.current();
-   QuantityHelper.timeFactory = provider.getQuantityFactory(Time.class);
-   QuantityHelper.lengthFactory = provider.getQuantityFactory(Length.class);
-   QuantityHelper.speedFactory = provider.getQuantityFactory(Speed.class);
+
+   QuantityUtils.timeFactory = provider.getQuantityFactory(Time.class);
+   QuantityUtils.lengthFactory = provider.getQuantityFactory(Length.class);
+   QuantityUtils.speedFactory = provider.getQuantityFactory(Speed.class);
    }
 
 // =====================================================================================================================
@@ -114,13 +115,13 @@ public static <Q extends Quantity<Q>> boolean compareQuantities(Quantity<Q> soll
 /**
  * Diese Methode erstellt aus der Maßzahl und der Einheit einer Zeitkoordinate ein {@link Quantity}-Objekt.
  *
- * @param masszahl die Maßzahl der Zeitkoordinate
- * @param einheit  die Einheit der Zeitkoordinate
+ * @param measure die Maßzahl der Zeitkoordinate
+ * @param unit    die Einheit der Zeitkoordinate
  * @return das erstellte {@link Quantity}-Objekt
  */
-public static Quantity<Time> createTimeQuantity(double masszahl, Unit<Time> einheit)
+public static Quantity<Time> createTimeQuantity(double measure, Unit<Time> unit)
    {
-   return QuantityHelper.timeFactory.create(masszahl, einheit);
+   return QuantityUtils.timeFactory.create(measure, unit);
    }
 
 // =====================================================================================================================
@@ -129,13 +130,13 @@ public static Quantity<Time> createTimeQuantity(double masszahl, Unit<Time> einh
 /**
  * Diese Methode erstellt aus der Maßzahl und der Einheit einer Ortskoordinate ein {@link Quantity}-Objekt.
  *
- * @param masszahl die Maßzahl der Ortskoordinate
- * @param einheit  die Einheit der Ortskoordinate
+ * @param measure die Maßzahl der Ortskoordinate
+ * @param unit    die Einheit der Ortskoordinate
  * @return das erstellte {@link Quantity}-Objekt
  */
-public static Quantity<Length> createLengthQuantity(double masszahl, Unit<Length> einheit)
+public static Quantity<Length> createLengthQuantity(double measure, Unit<Length> unit)
    {
-   return QuantityHelper.lengthFactory.create(masszahl, einheit);
+   return QuantityUtils.lengthFactory.create(measure, unit);
    }
 
 // =====================================================================================================================
@@ -144,12 +145,12 @@ public static Quantity<Length> createLengthQuantity(double masszahl, Unit<Length
 /**
  * Diese Methode erstellt aus der Maßzahl und der Einheit einer Ortskoordinate ein {@link Quantity}-Objekt.
  *
- * @param masszahl die Maßzahl der Geschwindigkeit
- * @param einheit die Einheit der Geschwindigkeit
+ * @param measure die Maßzahl der Geschwindigkeit
+ * @param unit    die Einheit der Geschwindigkeit
  * @return das erstellte {@link Quantity}-Objekt
  */
-public static Quantity<Speed> createSpeedQuantity(double masszahl, Unit<Speed> einheit)
+public static Quantity<Speed> createSpeedQuantity(double measure, Unit<Speed> unit)
    {
-   return QuantityHelper.speedFactory.create(masszahl, einheit);
+   return QuantityUtils.speedFactory.create(measure, unit);
    }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.thkwalter.galileitransformation;
+package de.thkwalter.galileantransformation;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
@@ -34,8 +34,8 @@ public class EreignisHelper
 public static Event erzeugeEreignis(double tMasszahl, Unit<Time> tEinheit, double xMasszahl, Unit<Length> xEinheit)
    {
    // Die Quantity-Objekte der beiden Koordinaten werden erzeugt.
-   Quantity<Time> t = QuantityHelper.createTimeQuantity(tMasszahl, tEinheit);
-   Quantity<Length> x = QuantityHelper.createLengthQuantity(xMasszahl, xEinheit);
+   Quantity<Time> t = QuantityUtils.createTimeQuantity(tMasszahl, tEinheit);
+   Quantity<Length> x = QuantityUtils.createLengthQuantity(xMasszahl, xEinheit);
 
    // Das Ereignis wird erzeugt und zurückgegeben.
    return new Event(t, x);
@@ -47,7 +47,7 @@ public static Event erzeugeEreignis(double tMasszahl, Unit<Time> tEinheit, doubl
 /**
  * Diese Methode vergleicht zwei {@link Event}-Objekte und gibt <tt>true</tt> zurück, falls die Zeit- und die
  * Ortskoordinaten (innerhalb gegebeber Toleranzbereiche) miteinander übereinstimmen. Zum Vergleich der einzelnen
- * Koordinatenwerte wird die Methode {@link QuantityHelper#compareQuantities(Quantity, Quantity, double, double)}
+ * Koordinatenwerte wird die Methode {@link QuantityUtils#compareQuantities(Quantity, Quantity, double, double)}
  * verwendet.
  *
  * @param sollEvent        das erwartete Ereignis
@@ -66,8 +66,8 @@ public static boolean compareEreignisse(Event sollEvent, Event istEvent, double 
    {
 
    // Die Zeit- und die Ortskoordinaten werden verglichen.
-   return QuantityHelper.compareQuantities(sollEvent.x(), istEvent.x(), relativeAbweichungX,
-         absoluteAbweichungX) && QuantityHelper.compareQuantities(sollEvent.t(), istEvent.t(),
+   return QuantityUtils.compareQuantities(sollEvent.x(), istEvent.x(), relativeAbweichungX,
+         absoluteAbweichungX) && QuantityUtils.compareQuantities(sollEvent.t(), istEvent.t(),
          relativeAbweichungT, absoluteAbweichungT);
    }
 }

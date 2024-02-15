@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.thkwalter.galileitransformation;
+package de.thkwalter.galileantransformation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,15 +47,15 @@ void testErzeugeEreignis()
    Unit<Time> tEinheit = MILLI(SECOND);
 
    // Aus den Rohdaten werden Quantity-Objekte erzeugt.
-   Quantity<Time> sollWertT = QuantityHelper.createTimeQuantity(tMasszahl, tEinheit);
-   Quantity<Length> sollWertX = QuantityHelper.createLengthQuantity(xMasszahl, xEinheit);
+   Quantity<Time> sollWertT = QuantityUtils.createTimeQuantity(tMasszahl, tEinheit);
+   Quantity<Length> sollWertX = QuantityUtils.createLengthQuantity(xMasszahl, xEinheit);
 
    // Die zu testende Methode wird aufgerufen.
    Event event = EreignisHelper.erzeugeEreignis(tMasszahl, tEinheit, xMasszahl, xEinheit);
 
    // Es wird geprüft, ob das Ereignis die richtigen Werte für die Orts- und Zeitkoordinate enthält.
-   QuantityHelper.compareQuantities(sollWertT, event.t(), 1E-9, 1E-9);
-   QuantityHelper.compareQuantities(sollWertX, event.x(), 1E-9, 1E-9);
+   QuantityUtils.compareQuantities(sollWertT, event.t(), 1E-9, 1E-9);
+   QuantityUtils.compareQuantities(sollWertX, event.x(), 1E-9, 1E-9);
    }
 
 // =====================================================================================================================

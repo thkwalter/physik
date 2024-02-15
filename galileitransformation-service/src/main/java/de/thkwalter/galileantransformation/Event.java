@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.thkwalter.galileitransformation;
+package de.thkwalter.galileantransformation;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Length;

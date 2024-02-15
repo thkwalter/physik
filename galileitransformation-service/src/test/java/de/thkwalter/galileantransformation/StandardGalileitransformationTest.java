@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.thkwalter.galileitransformation;
+package de.thkwalter.galileantransformation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,7 +68,7 @@ private static Arguments[] ereignisseUndGeschwindigkeitenLiefern()
    Arguments[] argumente = new Arguments[StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE];
    for (int i = 0; i < StandardGalileitransformationTest.ANZAHL_TESTDATENSAETZE; i++)
       {
-      Quantity<Speed> v = QuantityHelper.createSpeedQuantity(geschwindigkeiten.get(i), METRE_PER_SECOND);
+      Quantity<Speed> v = QuantityUtils.createSpeedQuantity(geschwindigkeiten.get(i), METRE_PER_SECOND);
       argumente[i] = Arguments.of(ereignisse[i], v);
       }
 
@@ -123,7 +123,7 @@ void testTransformiere1(Event originalEvent, Quantity<Speed> geschwindigkeit)
    Event transformiertesEvent = galileitransformation.transformiere(originalEvent);
 
    // Die Zeitkoordinate muss unverändert sein.
-   QuantityHelper.compareQuantities(originalEvent.t(), transformiertesEvent.t(), 1E+9, 1E-9);
+   QuantityUtils.compareQuantities(originalEvent.t(), transformiertesEvent.t(), 1E+9, 1E-9);
    }
 
 // =====================================================================================================================
@@ -140,14 +140,14 @@ void testTransformiere1(Event originalEvent, Quantity<Speed> geschwindigkeit)
 void testTransformiere2(Event originalEvent)
    {
    // Eine Standard-Galileitransformation für die Geschwindigkeit v = 0 wird erzeugt.
-   Quantity<Speed> v = QuantityHelper.createSpeedQuantity(0.0, METRE_PER_SECOND);
+   Quantity<Speed> v = QuantityUtils.createSpeedQuantity(0.0, METRE_PER_SECOND);
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(v);
 
    // Die zu testende Methode wird aufgerufen.
    Event transformiertesEvent = galileitransformation.transformiere(originalEvent);
 
    // Der Koordinatenwert für x muss unverändert sein.
-   QuantityHelper.compareQuantities(originalEvent.x(), transformiertesEvent.x(), 1E-9, 1E-9);
+   QuantityUtils.compareQuantities(originalEvent.x(), transformiertesEvent.x(), 1E-9, 1E-9);
    }
 
 // =====================================================================================================================
@@ -167,14 +167,14 @@ void testTransformiere3(Event originalEvent, Quantity<Speed> geschwindigkeit)
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(geschwindigkeit);
 
    // Ein zufälliges Ereignis mit t=0 wird erzeugt.
-   Quantity<Time> tQuantity = QuantityHelper.createTimeQuantity(0.0, Units.SECOND);
+   Quantity<Time> tQuantity = QuantityUtils.createTimeQuantity(0.0, Units.SECOND);
    Event modifiziertesOriginalEvent = new Event(tQuantity, originalEvent.x());
 
    // Die zu testende Methode wird aufgerufen.
    Event transformiertesEvent = galileitransformation.transformiere(modifiziertesOriginalEvent);
 
    // Der Koordinatenwert für x muss unverändert sein.
-   QuantityHelper.compareQuantities(originalEvent.x(), transformiertesEvent.x(), 1E-9, 1E-9);
+   QuantityUtils.compareQuantities(originalEvent.x(), transformiertesEvent.x(), 1E-9, 1E-9);
    }
 
 // =====================================================================================================================
@@ -218,20 +218,20 @@ void testTransformiere4(Event originalEvent, Quantity<Speed> geschwindigkeit)
 void testTransformiere5()
    {
    // Eine StandardGalileitransformation wird erzeugt.
-   Quantity<Speed> v = QuantityHelper.createSpeedQuantity(1.0, METRE_PER_SECOND);
+   Quantity<Speed> v = QuantityUtils.createSpeedQuantity(1.0, METRE_PER_SECOND);
    StandardGalileitransformation galileitransformation = new StandardGalileitransformation(v);
 
    // Vier originale Ereignisse werden erzeugt.
-   Quantity<Length> xSollQuantity1 = QuantityHelper.createLengthQuantity(1.0, Units.METRE);
+   Quantity<Length> xSollQuantity1 = QuantityUtils.createLengthQuantity(1.0, Units.METRE);
    Event originalEvent1 = EreignisHelper.erzeugeEreignis(1.0, Units.SECOND, 1.0, Units.METRE);
 
-   Quantity<Length> xSollQuantity2 = QuantityHelper.createLengthQuantity(5.0, Units.METRE);
+   Quantity<Length> xSollQuantity2 = QuantityUtils.createLengthQuantity(5.0, Units.METRE);
    Event originalEvent2 = EreignisHelper.erzeugeEreignis(-2.0, Units.SECOND, 3.0, Units.METRE);
 
-   Quantity<Length> xSollQuantity3 = QuantityHelper.createLengthQuantity(-19.0, Units.METRE);
+   Quantity<Length> xSollQuantity3 = QuantityUtils.createLengthQuantity(-19.0, Units.METRE);
    Event originalEvent3 = EreignisHelper.erzeugeEreignis(9.0, Units.SECOND, -10.0, Units.METRE);
 
-   Quantity<Length> xSollQuantity4 = QuantityHelper.createLengthQuantity(-1.0, Units.METRE);
+   Quantity<Length> xSollQuantity4 = QuantityUtils.createLengthQuantity(-1.0, Units.METRE);
    Event originalEvent4 = EreignisHelper.erzeugeEreignis(-13.0, Units.SECOND, -14.0, Units.METRE);
 
    // Die zu testende Methode wird aufgerufen.
@@ -241,9 +241,9 @@ void testTransformiere5()
    Event transformiertesEvent4 = galileitransformation.transformiere(originalEvent4);
 
    // Die x-Koordinate wurde korrekt transformiert.
-   QuantityHelper.compareQuantities(transformiertesEvent1.x(), xSollQuantity1, 1E-9, 1E-9);
-   QuantityHelper.compareQuantities(transformiertesEvent2.x(), xSollQuantity2, 1E-9, 1E-9);
-   QuantityHelper.compareQuantities(transformiertesEvent3.x(), xSollQuantity3, 1E-9, 1E-9);
-   QuantityHelper.compareQuantities(transformiertesEvent4.x(), xSollQuantity4, 1E-9, 1E-9);
+   QuantityUtils.compareQuantities(transformiertesEvent1.x(), xSollQuantity1, 1E-9, 1E-9);
+   QuantityUtils.compareQuantities(transformiertesEvent2.x(), xSollQuantity2, 1E-9, 1E-9);
+   QuantityUtils.compareQuantities(transformiertesEvent3.x(), xSollQuantity3, 1E-9, 1E-9);
+   QuantityUtils.compareQuantities(transformiertesEvent4.x(), xSollQuantity4, 1E-9, 1E-9);
    }
 }
