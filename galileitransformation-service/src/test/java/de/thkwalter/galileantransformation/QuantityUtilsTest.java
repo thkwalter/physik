@@ -34,65 +34,67 @@ import static tech.units.indriya.unit.Units.*;
 class QuantityUtilsTest
 {
 @Test
-@DisplayName("Ist-Wert ist null")
+@DisplayName("Testet den Vergleich zweier Angaben, wobei das Argument 'actualValue' gleich null ist")
 void testCompareQuantities1()
    {
    // Die Testdaten werden erstellt.
-   Quantity<Length> sollWert = QuantityUtils.createLengthQuantity(-4.0, METRE);
-   Quantity<Length> istWert = QuantityUtils.createLengthQuantity(0.0, METRE);
+   Quantity<Length> expectedValue = QuantityUtils.createLengthQuantity(-4.0, METRE);
+   Quantity<Length> actualValue = QuantityUtils.createLengthQuantity(0.0, METRE);
 
    // Die zu testende Methode wird aufgerufen und der Rückgabewert geprüft.
-   assertTrue(QuantityUtils.compareQuantities(sollWert, istWert, 1E-9, 4.001));
-   assertFalse(QuantityUtils.compareQuantities(sollWert, istWert, 1E-9, 4.0));
+   assertTrue(QuantityUtils.compareQuantities(expectedValue, actualValue, 1E-9, 4.001));
+   assertFalse(QuantityUtils.compareQuantities(expectedValue, actualValue, 1E-9, 4.0));
    }
 
 // =====================================================================================================================
 // =====================================================================================================================
 
 @Test
-@DisplayName("Soll-Wert ist null")
+@DisplayName("Testet den Vergleich zweier Angaben, wobei das Argument 'expectedValue' gleich null ist")
 void testCompareQuantities2()
    {
    // Die Testdaten werden erstellt.
-   Quantity<Length> sollWert = QuantityUtils.createLengthQuantity(0.0, METRE);
-   Quantity<Length> istWert = QuantityUtils.createLengthQuantity(1.0, METRE);
+   Quantity<Length> expectedValue = QuantityUtils.createLengthQuantity(0.0, METRE);
+   Quantity<Length> actualValue = QuantityUtils.createLengthQuantity(1.0, METRE);
 
    // Die zu testende Methode wird aufgerufen und der Rückgabewert geprüft.
-   assertTrue(QuantityUtils.compareQuantities(sollWert, istWert, 1E-9, 1.001));
-   assertFalse(QuantityUtils.compareQuantities(sollWert, istWert, 1E-9, 1.0));
+   assertTrue(QuantityUtils.compareQuantities(expectedValue, actualValue, 1E-9, 1.001));
+   assertFalse(QuantityUtils.compareQuantities(expectedValue, actualValue, 1E-9, 1.0));
    }
 
 // =====================================================================================================================
 // =====================================================================================================================
 
 @Test
-@DisplayName("Soll- und Ist-Wert sind verschieden null")
+@DisplayName("Testet den Vergleich zweier Angaben, wobei die Argumente 'expectedValue' und 'actualValue' gleich null " +
+      "sind")
 void testCompareQuantities3()
    {
    // Die Testdaten werden erstellt.
-   Quantity<Length> sollWert = QuantityUtils.createLengthQuantity(1000.0, METRE);
-   Quantity<Length> istWert = QuantityUtils.createLengthQuantity(1001.0, METRE);
+   Quantity<Length> expectedValue = QuantityUtils.createLengthQuantity(1000.0, METRE);
+   Quantity<Length> actualValue = QuantityUtils.createLengthQuantity(1001.0, METRE);
 
    // Die zu testende Methode wird aufgerufen und der Rückgabewert geprüft.
-   assertTrue(QuantityUtils.compareQuantities(sollWert, istWert, 1.001E-3, 1.0));
-   assertFalse(QuantityUtils.compareQuantities(sollWert, istWert, 1E-3, 1.0));
+   assertTrue(QuantityUtils.compareQuantities(expectedValue, actualValue, 1.001E-3, 1.0));
+   assertFalse(QuantityUtils.compareQuantities(expectedValue, actualValue, 1E-3, 1.0));
    }
 
 // =====================================================================================================================
 // =====================================================================================================================
 
 @Test
-@DisplayName("Soll- und Ist-Wert sind negativ")
+@DisplayName("Testet den Vergleich zweier Angaben, wobei die Argumente 'relativeTolerance' und 'absoluteTolerance' " +
+      "negativ sind")
 void testCompareQuantities4()
    {
    // Die Testdaten werden erstellt.
-   Quantity<Length> sollWert = QuantityUtils.createLengthQuantity(1000.0, METRE);
-   Quantity<Length> istWert = QuantityUtils.createLengthQuantity(1001.0, METRE);
+   Quantity<Length> expectedValue = QuantityUtils.createLengthQuantity(1000.0, METRE);
+   Quantity<Length> actualValue = QuantityUtils.createLengthQuantity(1001.0, METRE);
 
    // Die zu testende Methode wird aufgerufen und der Rückgabewert geprüft.
    try
       {
-      QuantityUtils.compareQuantities(sollWert, istWert, -1.0, 1.0);
+      QuantityUtils.compareQuantities(expectedValue, actualValue, -1.0, 1.0);
       fail("Es hätte eine Ausnahme geworfen werden müssen.");
       }
    catch (IllegalArgumentException ex)
@@ -102,7 +104,7 @@ void testCompareQuantities4()
 
    try
       {
-      QuantityUtils.compareQuantities(sollWert, istWert, 1E-3, -1.0);
+      QuantityUtils.compareQuantities(expectedValue, actualValue, 1E-3, -1.0);
       fail("Es hätte eine Ausnahme geworfen werden müssen.");
       }
    catch (IllegalArgumentException ex)
