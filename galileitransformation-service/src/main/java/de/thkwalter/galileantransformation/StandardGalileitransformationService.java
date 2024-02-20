@@ -57,7 +57,7 @@ public Event transformiere(@RequestParam(value = "tMasszahl") double tMasszahl,
    Unit<Speed> vUnit = AbstractUnit.parse(vEinheit).asType(Speed.class);
 
    // Das originale Ereignis wird mithilfe der Request-Parameter erzeugt.
-   Event originalEvent = EreignisHelper.erzeugeEreignis(tMasszahl, tUnit, xMasszahl, xUnit);
+   Event originalEvent = EventUtils.createEvent(tMasszahl, tUnit, xMasszahl, xUnit);
 
    // Die Galileitransformation wird mithilfe des letzten Request-Parameters erzeugt.
    Quantity<Speed> v = QuantityUtils.createSpeedQuantity(vMasszahl, vUnit);

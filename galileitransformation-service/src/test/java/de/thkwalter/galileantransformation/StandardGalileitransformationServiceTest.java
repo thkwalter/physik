@@ -50,7 +50,7 @@ void testTransformiere1()
    Unit<Length> xEinheit = METRE;
    double vMasszahl = 1.0;
    String vSymbol = "m/s";
-   Event sollEvent = EreignisHelper.erzeugeEreignis(tMasszahl, tEinheit, xMasszahl, xEinheit);
+   Event sollEvent = EventUtils.createEvent(tMasszahl, tEinheit, xMasszahl, xEinheit);
 
    // Ein Objekt der zu testenden Klasse wird erzeugt.
    StandardGalileitransformationService controller = new StandardGalileitransformationService();
@@ -69,7 +69,7 @@ void testTransformiere1()
          -vMasszahl, vSymbol);
 
    // Soll- und Ist-Ereignis werden verglichen.
-   EreignisHelper.compareEreignisse(sollEvent, istEvent, 1E-9, 1E-9, 1E-9, 1E-9);
+   EventUtils.compareEvents(sollEvent, istEvent, 1E-9, 1E-9, 1E-9, 1E-9);
    }
 
 // =====================================================================================================================

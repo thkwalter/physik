@@ -32,48 +32,48 @@ import static tech.units.indriya.unit.Units.METRE;
 import static tech.units.indriya.unit.Units.SECOND;
 
 /**
- * Diese Klasse enthält JUnit-Tests für die Klasse {@link EreignisHelper}.
+ * Diese Klasse enthält JUnit-Tests für die Klasse {@link EventUtils}.
  */
-class EventHelperTest
+class EventUtilsTest
 {
 @Test
-@DisplayName("Ereignis wird korrekt erzeugt")
-void testErzeugeEreignis()
+@DisplayName("Testet die Erzeugung eines Ereignisses")
+void testCreateEvent()
    {
    // Die Testdaten werden initialisiert
-   double tMasszahl = 4.2;
-   double xMasszahl = -2.5;
-   Unit<Length> xEinheit = Units.METRE;
-   Unit<Time> tEinheit = MILLI(SECOND);
+   double tMeasure = 4.2;
+   double xMeasure = -2.5;
+   Unit<Length> xUnit = Units.METRE;
+   Unit<Time> tUnit = MILLI(SECOND);
 
    // Aus den Rohdaten werden Quantity-Objekte erzeugt.
-   Quantity<Time> sollWertT = QuantityUtils.createTimeQuantity(tMasszahl, tEinheit);
-   Quantity<Length> sollWertX = QuantityUtils.createLengthQuantity(xMasszahl, xEinheit);
+   Quantity<Time> expectedT = QuantityUtils.createTimeQuantity(tMeasure, tUnit);
+   Quantity<Length> expectedX = QuantityUtils.createLengthQuantity(xMeasure, xUnit);
 
    // Die zu testende Methode wird aufgerufen.
-   Event event = EreignisHelper.erzeugeEreignis(tMasszahl, tEinheit, xMasszahl, xEinheit);
+   Event event = EventUtils.createEvent(tMeasure, tUnit, xMeasure, xUnit);
 
    // Es wird geprüft, ob das Ereignis die richtigen Werte für die Orts- und Zeitkoordinate enthält.
-   QuantityUtils.compareQuantities(sollWertT, event.t(), 1E-9, 1E-9);
-   QuantityUtils.compareQuantities(sollWertX, event.x(), 1E-9, 1E-9);
+   QuantityUtils.compareQuantities(expectedT, event.t(), 1E-9, 1E-9);
+   QuantityUtils.compareQuantities(expectedX, event.x(), 1E-9, 1E-9);
    }
 
 // =====================================================================================================================
 // =====================================================================================================================
 
 @Test
-@DisplayName("Ereignisse werden korrekt verglichen")
-void testCompareEreignisse()
+@DisplayName("Testet den Vergleich zweier Ereignisse")
+void testCompareEvents()
    {
    // Die Testdaten werden intialisiert.
-   Event sollEvent = EreignisHelper.erzeugeEreignis(2.2, SECOND, 0.0, KILO(METRE));
-   Event istEventKorrekt = EreignisHelper.erzeugeEreignis(2200, MILLI(SECOND), 0.0, METRE);
-   Event istEventFalsch1 = EreignisHelper.erzeugeEreignis(2.2001, SECOND, 0.0, KILO(METRE));
-   Event istEventFalsch2 = EreignisHelper.erzeugeEreignis(2.2, SECOND, 0.001, KILO(METRE));
+   Event expectedEvent = EventUtils.createEvent(2.2, SECOND, 0.0, KILO(METRE));
+   Event correctEvent = EventUtils.createEvent(2200, MILLI(SECOND), 0.0, METRE);
+   Event falseEvent1 = EventUtils.createEvent(2.2001, SECOND, 0.0, KILO(METRE));
+   Event falseEvent2 = EventUtils.createEvent(2.2, SECOND, 0.001, KILO(METRE));
 
    // Die zu testende Methode wird aufgerufen
-   assertTrue(EreignisHelper.compareEreignisse(sollEvent, istEventKorrekt,1E-9, 1E-9, 1E-9, 1E-9));
-   assertFalse(EreignisHelper.compareEreignisse(sollEvent, istEventFalsch1,1E-9, 1E-9, 1E-9, 1E-9));
-   assertFalse(EreignisHelper.compareEreignisse(sollEvent, istEventFalsch2,1E-9, 1E-9, 1E-9, 1E-9));
+   assertTrue(EventUtils.compareEvents(expectedEvent, correctEvent,1E-9, 1E-9, 1E-9, 1E-9));
+   assertFalse(EventUtils.compareEvents(expectedEvent, falseEvent1,1E-9, 1E-9, 1E-9, 1E-9));
+   assertFalse(EventUtils.compareEvents(expectedEvent, falseEvent2,1E-9, 1E-9, 1E-9, 1E-9));
    }
 }

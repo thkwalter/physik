@@ -97,7 +97,7 @@ private static Event[] ereignisseLiefern()
       {
       double tMasszahl = zufallszahlen.get(2 * i);
       double xMasszahl = zufallszahlen.get(2 * i + 1);
-      ereignisse[i] = EreignisHelper.erzeugeEreignis(tMasszahl, Units.SECOND, xMasszahl, Units.METRE);
+      ereignisse[i] = EventUtils.createEvent(tMasszahl, Units.SECOND, xMasszahl, Units.METRE);
       }
 
    return ereignisse;
@@ -203,7 +203,7 @@ void testTransformiere4(Event originalEvent, Quantity<Speed> geschwindigkeit)
    Event transformiertesEvent = ruecktransformation.transformiere(temporaeresEvent);
 
    // Die Ereignisse werden verglichen
-   EreignisHelper.compareEreignisse(originalEvent, transformiertesEvent, 1E-9, 1E-9, 1E-9, 1E-9);
+   EventUtils.compareEvents(originalEvent, transformiertesEvent, 1E-9, 1E-9, 1E-9, 1E-9);
    }
 
 // ==================================================================================================================
@@ -223,16 +223,16 @@ void testTransformiere5()
 
    // Vier originale Ereignisse werden erzeugt.
    Quantity<Length> xSollQuantity1 = QuantityUtils.createLengthQuantity(1.0, Units.METRE);
-   Event originalEvent1 = EreignisHelper.erzeugeEreignis(1.0, Units.SECOND, 1.0, Units.METRE);
+   Event originalEvent1 = EventUtils.createEvent(1.0, Units.SECOND, 1.0, Units.METRE);
 
    Quantity<Length> xSollQuantity2 = QuantityUtils.createLengthQuantity(5.0, Units.METRE);
-   Event originalEvent2 = EreignisHelper.erzeugeEreignis(-2.0, Units.SECOND, 3.0, Units.METRE);
+   Event originalEvent2 = EventUtils.createEvent(-2.0, Units.SECOND, 3.0, Units.METRE);
 
    Quantity<Length> xSollQuantity3 = QuantityUtils.createLengthQuantity(-19.0, Units.METRE);
-   Event originalEvent3 = EreignisHelper.erzeugeEreignis(9.0, Units.SECOND, -10.0, Units.METRE);
+   Event originalEvent3 = EventUtils.createEvent(9.0, Units.SECOND, -10.0, Units.METRE);
 
    Quantity<Length> xSollQuantity4 = QuantityUtils.createLengthQuantity(-1.0, Units.METRE);
-   Event originalEvent4 = EreignisHelper.erzeugeEreignis(-13.0, Units.SECOND, -14.0, Units.METRE);
+   Event originalEvent4 = EventUtils.createEvent(-13.0, Units.SECOND, -14.0, Units.METRE);
 
    // Die zu testende Methode wird aufgerufen.
    Event transformiertesEvent1 = galileitransformation.transformiere(originalEvent1);
