@@ -37,7 +37,7 @@ class StandardGalileitransformationServiceTest
 /**
  * Test für die Methode
  * {@link StandardGalileitransformationService#transformiere(double, String, double, String, double, String)}. Der Test prüft
- * nach, ob die Funktionsargumente korrekt an die {@link StandardGalileitransformation} übergeben werden.
+ * nach, ob die Funktionsargumente korrekt an die {@link GalileanBoost} übergeben werden.
  */
 @DisplayName("Die Funktionsargumente werden korrekt an die StandardGalileitransformation übergeben.")
 @Test
@@ -78,7 +78,7 @@ void testTransformiere1()
 /**
  * Test für die Methode
  * {@link StandardGalileitransformationService#transformiere(double, String, double, String, double, String)}. Der Test prüft
- * nach, ob die Funktionsargumente korrekt an die {@link StandardGalileitransformation} übergeben werden.
+ * nach, ob die Funktionsargumente korrekt an die {@link GalileanBoost} übergeben werden.
  */
 @DisplayName("Der Test prüft das Verhalten, wenn das Symbol für eine Einheit nicht erkannt wird.")
 @Test

@@ -61,9 +61,9 @@ public Event transformiere(@RequestParam(value = "tMasszahl") double tMasszahl,
 
    // Die Galileitransformation wird mithilfe des letzten Request-Parameters erzeugt.
    Quantity<Speed> v = QuantityUtils.createSpeedQuantity(vMasszahl, vUnit);
-   StandardGalileitransformation galileitransformation = new StandardGalileitransformation(v);
+   GalileanBoost galileitransformation = new GalileanBoost(v);
 
    // Das originale Ereignis wird transformiert und das transformierte Ereignis zurückgegeben.
-   return galileitransformation.transformiere(originalEvent);
+   return galileitransformation.transform(originalEvent);
    }
 }

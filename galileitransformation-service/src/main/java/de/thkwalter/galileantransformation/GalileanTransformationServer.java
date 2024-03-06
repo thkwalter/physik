@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Bean;
 import javax.measure.Quantity;
 
 /**
- * Diese Klasse startet einen Server, der den {@link StandardGalileitransformation-Services} anbietet.
+ * Diese Klasse startet einen Server, der den {@link GalileanBoost -Services} anbietet.
  * 
  * @author Th. K. Walter
  */

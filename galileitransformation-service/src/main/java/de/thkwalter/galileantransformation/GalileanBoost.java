@@ -21,11 +21,12 @@ import javax.measure.quantity.Speed;
 import javax.measure.quantity.Time;
 
 /**
- * Diese Klasse repräsentiert eine Galileitransformation für zwei Koordinatensysteme in der Standardkonfiguration.
+ * Diese Klasse repräsentiert eine spezielle Galileitransformation für zwei Koordinatensysteme in der
+ * Standardkonfiguration, d.h <tt>x' = x - vt</tt> und <tt>t' = t</tt>.
  *
  * @author Th. K. Walter
  */
-public class StandardGalileitransformation
+public class GalileanBoost
 {
 /**
  * Die Geschwindigkeit (in m/s)
@@ -38,9 +39,9 @@ private final Quantity<Speed> v;
 /**
  * Initialisiert die Galileitransformation durch Angabe der Geschwindigkeit.
  *
- * @param v die Geschwindigkeit (in m/s)
+ * @param v die Geschwindigkeit
  */
-public StandardGalileitransformation(Quantity<Speed> v)
+public GalileanBoost(Quantity<Speed> v)
    {
    this.v = v;
    }
@@ -55,7 +56,7 @@ public StandardGalileitransformation(Quantity<Speed> v)
  *
  * @return das transformierte Ereignis
  */
-public Event transformiere(Event originalEvent)
+public Event transform(Event originalEvent)
    {
    // Die Orts-- und die Zeitkoordinate werden extrahiert.
    Quantity<Length> x = originalEvent.x();
@@ -63,9 +64,9 @@ public Event transformiere(Event originalEvent)
 
    // Bei einer Standard-Galileitransformation muss nur die x-Koordinate des transformierten Ereignisses berechnet
    // werden.
-   Quantity<Length> xTransformiert = x.subtract(v.multiply(t).asType(Length.class));
+   Quantity<Length> xTransformed = x.subtract(v.multiply(t).asType(Length.class));
 
    // Das transformierte Ereignis wird erstellt und zurückgegeben.
-   return new Event(t, xTransformiert);
+   return new Event(t, xTransformed);
    }
 }
